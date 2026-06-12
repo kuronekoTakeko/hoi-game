@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オリジナルあっちむいてホイ</title>
+    <meta name="theme-color" content="#4A90E2">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        #app { 
+            background: white; 
+            width: 100vw; 
+            max-width: 600px; 
+            height: 100vh; 
+            max-height: 95vh; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+        }
+        
+        @media (min-width: 500px) {
+            #app { border-radius: 24px; }
+        }
+
+        .screen { display: none; flex-direction: column; height: 100%; width: 100%; padding: 32px; text-align: center; justify-content: space-between; }
+        .screen.active { display: flex; }
+        
+        button { background: #4A90E2; color: white; border: none; padding: 20px 40px; font-size: 1.5rem; font-weight: bold; border-radius: 50px; cursor: pointer; }
+        #start-screen { justify-content: center; gap: 50px; }
+        .difficulty-select { display: flex; flex-direction: column; gap: 16px; width: 85%; margin: 0 auto; font-size: 1.2rem; }
+        .diff-btn { background: #6c757d; }
+        .diff-btn.selected { background: #28a745; }
+
+        /* ステータスバー（要素が3つ綺麗に並ぶよう調整） */
+        .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; color: #666; font-weight: bold; }
+        
+        /* ★新設：「やめる」ボタンの専用デザイン（グレーで小さめ、角を少し丸めた押しやすい形） */
+        .quit-btn { background: #e0e0e0; color: #555; padding: 6px 14px; font-size: 0.9rem; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; }
+        .quit-btn:active { background: #ccc; }
+
+        .character-zone { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 10px 0; }
+        .stage-box { width: 100%; height: 100%; max-height: 480px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+        
+        .enemy-image-area { 
+            width: 100%; 
+            max-width: 250px; 
+            height: 250px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 1; 
+        }
+        .enemy-image-area img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+        }
+
+        .enemy-hand { font-size: 5.5rem; height: 120px; width: 120px; display: flex; align-items: center; justify-content: center; background: #e9ecef; border-radius: 50%; transition: transform 0.15s; z-index: 1; }
+        
+        .voice-text { 
+            font-size: 3.2rem; 
+            font-weight: 900; 
+            color: #ffffff; 
+            text-shadow: -3px -3px 0 #e91e63, 3px -3px 0 #e91e63, -3px 3px 0 #e91e63, 3px 3px 0 #e91e63, 0 6px 12px rgba(0,0,0,0.3); 
+            z-index: 10; 
+            white-space: nowrap;
+            pointer-events: none;
+            margin: 10px 0;
+            animation: popText 0.15s ease-out;
+        }
+
+        @keyframes popText {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .controls { min-height: 200px; display: flex; align-items: center; justify-content: center; }
+        .janken-controls { display: flex; gap: 24px; }
+        .janken-btn { font-size: 3.5rem; background: #f8f9fa; border: 4px solid #4A90E2; border-radius: 50%; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; padding:0; }
+        
+        .hoi-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; width: 280px; }
+        .hoi-btn { font-size: 2.5rem; background: #f8f9fa; border: 4px solid #ff9800; border-radius: 20px; height: 80px; display: flex; align-items: center; justify-content: center; padding:0; }
+        .hoi-btn:nth-child(1) { grid-column: 2; }
+        .hoi-btn:nth-child(2) { grid-column: 1; grid-row: 2; }
+        .hoi-btn:nth-child(3) { grid-column: 3; grid-row: 2; }
+        .hoi-btn:nth-child(4) { grid-column: 2; grid-row: 3; }
+
+        #result-screen { justify-content: center; gap: 50px; }
+        .result-title { font-size: 4rem; font-weight: bold; }
+        .win { color: #28a745; }
+        .lose { color: #dc3545; }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div id="start-screen" class="screen active">
+        <h1>あっちむいてホイ！</h1>
+        <div class="difficulty-select">
+            <label>あいてのつよさ</label>
+            <button class="diff-btn selected" onclick="setDifficulty(300, this)">よわい (ゆっくり)</button>
+            <button class="diff-btn" onclick="setDifficulty(150, this)">ふつう (はやい)</button>
+            <button class="diff-btn" onclick="setDifficulty(60, this)">つよい (超高速)</button>
+        </div>
+        <button onclick="startGame()">ゲームスタート</button>
+    </div>
+
+    <div id="game-screen" class="screen">
+        <div class="status-bar">
+            <span id="match-count">第 1 回戦</span>
+            <span>あいて：キャラクター</span>
+            <!-- ★新設：右端に配置したやめるボタン -->
+            <button class="quit-btn" onclick="quitGame()">やめる</button>
+        </div>
+        
+        <div class="character-zone">
+            <div class="stage-box">
+                <div class="enemy-image-area">
+                    <img id="enemy-avatar-display" src="front.png" alt="あいて">
+                </div>
+                <div class="voice-text" id="voice-display">じゃーんけーん…</div>
+                <div class="enemy-hand" id="enemy-hand-display">✊</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div id="janken-ui" class="janken-controls">
+                <button class="janken-btn" onclick="playJanken('✊')">✊</button>
+                <button class="janken-btn" onclick="playJanken('✌️')">✌️</button>
+                <button class="janken-btn" onclick="playJanken('🖐️')">🖐️</button>
+            </div>
+            <div id="hoi-ui" class="hoi-controls" style="display: none;">
+                <button class="hoi-btn" onclick="playHoi('👆')">👆</button>
+                <button class="hoi-btn" onclick="playHoi('👈')">👈</button>
+                <button class="hoi-btn" onclick="playHoi('👉')">👉</button>
+                <button class="hoi-btn" onclick="playHoi('👇')">👇</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="result-screen" class="screen">
+        <div id="result-text" class="result-title"></div>
+        <button onclick="resetGame()">もういちど遊ぶ</button>
+    </div>
+</div>
+<script>
+    const hands = ['✊', '✌️', '🖐️'];
+    const dirKeys = ['👆', '👈', '👉', '👇'];
+    
+    const enemyImages = {
+        '正面': 'front.png',
+        '👆': 'up.png',
+        '👇': 'down.png',
+        '👈': 'left.png',
+        '👉': 'right.png'
+    };
+
+    let enemySpeed = 300, loopInterval = null, jankenResult = "", currentHandIndex = 0, matchRound = 1;
+
+    function setVoiceText(text) {
+        const el = document.getElementById('voice-display');
+        el.innerText = text;
+        el.style.animation = 'none';
+        el.offsetHeight; 
+        el.style.animation = null;
+    }
+
+    function changeScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    function setDifficulty(speed, element) {
+        enemySpeed = speed;
+        document.querySelectorAll('.diff-btn').forEach(btn => btn.classList.remove('selected'));
+        element.classList.add('selected');
+    }
+
+    function startGame() {
+        changeScreen('game-screen');
+        document.getElementById('match-count').innerText = `第 ${matchRound} 回戦`;
+        document.getElementById('enemy-avatar-display').src = enemyImages['正面'];
+        startJankenLoop();
+    }
+
+    function startJankenLoop() {
+        document.getElementById('janken-ui').style.display = 'flex';
+        document.getElementById('hoi-ui').setAttribute("style", "display:none;");
+        setVoiceText("じゃーんけーん…");
+        loopInterval = setInterval(() => {
+            currentHandIndex = (currentHandIndex + 1) % hands.length;
+            document.getElementById('enemy-hand-display').innerText = hands[currentHandIndex];
+        }, enemySpeed);
+    }
+
+    function playJanken(playerHand) {
+        clearInterval(loopInterval);
+        setVoiceText("ぽん！");
+        const enemyHand = hands[Math.floor(Math.random() * hands.length)];
+        document.getElementById('enemy-hand-display').innerText = enemyHand;
+
+        if (playerHand === enemyHand) {
+            jankenResult = "draw";
+            setTimeout(() => { startJankenLoop(); }, 1200);
+            return;
+        } else if (
+            (playerHand === '✊' && enemyHand === '✌️') ||
+            (playerHand === '✌️' && enemyHand === '🖐️') ||
+            (playerHand === '🖐️' && enemyHand === '✊')
+        ) {
+            jankenResult = "player_attack"; 
+        } else {
+            jankenResult = "enemy_attack";  
+        }
+        setTimeout(() => { setupHoi(); }, 1000);
+    }
+
+    function setupHoi() {
+        document.getElementById('janken-ui').style.display = 'none';
+        document.getElementById('hoi-ui').removeAttribute("style");
+        document.getElementById('enemy-hand-display').innerText = "❓";
+        setVoiceText("あっち向いて―");
+    }
+
+    function playHoi(playerDir) {
+        setVoiceText("ほい！");
+        document.getElementById('hoi-ui').setAttribute("style", "display:none;");
+
+        const enemyDirKey = dirKeys[Math.floor(Math.random() * dirKeys.length)];
+        const avatar = document.getElementById('enemy-avatar-display');
+        const handDisplay = document.getElementById('enemy-hand-display');
+
+        if (jankenResult === "player_attack") {
+            avatar.src = enemyImages[enemyDirKey];
+            handDisplay.innerText = "👉";
+            rotateFinger(handDisplay, playerDir);
+        } else {
+            avatar.src = enemyImages['正面'];
+            handDisplay.innerText = "👉";
+            rotateFinger(handDisplay, enemyDirKey);
+        }
+
+        setTimeout(() => {
+            handDisplay.style.transform = "none";
+            avatar.src = enemyImages['正面'];
+
+            if (playerDir === enemyDirKey) {
+                if (jankenResult === "player_attack") { endGame("win"); } 
+                else { endGame("lose"); }
+            } else {
+                matchRound++;
+                startGame();
+            }
+        }, 1500);
+    }
+
+    function rotateFinger(element, direction) {
+        if(direction === '👆') element.style.transform = "rotate(-90deg) scale(1.2)";
+        if(direction === '👇') element.style.transform = "rotate(90deg) scale(1.2)";
+        if(direction === '👈') element.style.transform = "scaleX(-1) scale(1.2)";
+        if(direction === '👉') element.style.transform = "scale(1.2)";
+    }
+
+    function endGame(finalResult) {
+        const resultText = document.getElementById('result-text');
+        if (finalResult === "win") {
+            resultText.innerText = "かち！🏆";
+            resultText.className = "result-title win";
+        } else {
+            resultText.innerText = "まけ…😭";
+            resultText.className = "result-title lose";
+        }
+        changeScreen('result-screen');
+    }
+
+    // ★新設：ゲームを安全に中断して最初の画面に戻る処理
+    function quitGame() {
+        clearInterval(loopInterval); // 動いているじゃんけんのタイマーを確実に止める
+        matchRound = 1; // 回戦数をリセット
+        changeScreen('start-screen'); // スタート画面へ戻る
+    }
+
+    function resetGame() {
+        matchRound = 1;
+        changeScreen('start-screen');
+    }
+
+    if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
+        window.addEventListener('load', () => {
+            const swCode = `
+                self.addEventListener('install', (e) => e.waitUntil(caches.open('v1').then(c => c.addAll(['./']))));
+                self.addEventListener('fetch', (e) => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
+            `;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(err => console.log(err));
+        });
+    }
+</script>
+</body>
+</html>
