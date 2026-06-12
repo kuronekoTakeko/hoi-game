@@ -2,94 +2,123 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>オリジナルあっちむいてホイ</title>
     <meta name="theme-color" content="#4A90E2">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        html, body { 
+            background: #f0f2f5; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            width: 100%;
+            height: 100%;
+            overflow: hidden; 
+            position: fixed; 
+        }
         
         #app { 
-            background: white; 
-            width: 100vw; 
-            max-width: 600px; 
-            height: 100vh; 
-            max-height: 95vh; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            width: 100%; 
+            max-width: 500px; 
+            height: 100%; 
             display: flex; 
             flex-direction: column; 
             overflow: hidden; 
+            padding: calc(env(safe-area-inset-top) + 15px) 16px calc(env(safe-area-inset-bottom) + 20px) 16px; 
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
-        @media (min-width: 500px) {
-            #app { border-radius: 24px; }
+        #app.bg-normal { background-color: #e8f5e9; color: #2e7d32; }
+        #app.bg-player { background-color: #e3f2fd; color: #1565c0; }
+        #app.bg-enemy  { background-color: #ffebee; color: #c62828; }
+
+        @media (min-width: 500px) and (min-height: 700px) {
+            #app { height: 95%; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); padding: 20px; }
         }
 
-        .screen { display: none; flex-direction: column; height: 100%; width: 100%; padding: 32px; text-align: center; justify-content: space-between; }
+        /* ★screen全体に「上下左右中央寄せ」を設定し、中身のパーツがバラバラに広がらないように固定 */
+        .screen { 
+            display: none; 
+            flex-direction: column; 
+            height: 100%; 
+            width: 100%; 
+            text-align: center; 
+            justify-content: center; /* 縦方向の中央寄せ */
+            align-items: center;     /* 横方向の中央寄せ */
+            gap: 15px;               /* パーツ間の適度な隙間 */
+        }
         .screen.active { display: flex; }
         
-        button { background: #4A90E2; color: white; border: none; padding: 20px 40px; font-size: 1.5rem; font-weight: bold; border-radius: 50px; cursor: pointer; }
-        #start-screen { justify-content: center; gap: 50px; }
-        .difficulty-select { display: flex; flex-direction: column; gap: 16px; width: 85%; margin: 0 auto; font-size: 1.2rem; }
-        .diff-btn { background: #6c757d; }
+        button { background: #4A90E2; color: white; border: none; padding: 16px 32px; font-size: 1.4rem; font-weight: bold; border-radius: 50px; cursor: pointer; }
+        
+        #start-screen { gap: 45px; }
+        #start-screen h1 { color: #333; }
+        .difficulty-select { display: flex; flex-direction: column; gap: 12px; width: 85%; margin: 0 auto; font-size: 1.1rem; color: #555; }
+        .diff-btn { background: #6c757d; padding: 12px; font-size: 1.1rem; color: white; }
         .diff-btn.selected { background: #28a745; }
 
-        /* ステータスバー（要素が3つ綺麗に並ぶよう調整） */
-        .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; color: #666; font-weight: bold; }
-        
-        /* ★新設：「やめる」ボタンの専用デザイン（グレーで小さめ、角を少し丸めた押しやすい形） */
-        .quit-btn { background: #e0e0e0; color: #555; padding: 6px 14px; font-size: 0.9rem; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; }
-        .quit-btn:active { background: #ccc; }
-
-        .character-zone { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 10px 0; }
-        .stage-box { width: 100%; height: 100%; max-height: 480px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
-        
-        .enemy-image-area { 
-            width: 100%; 
-            max-width: 250px; 
-            height: 250px; 
+        /* ステータスバーは一番上に固定したいので、絶対配置（absolute）にして中央寄せの影響を受けないように隔離 */
+        .status-bar { 
+            position: absolute;
+            top: calc(env(safe-area-inset-top) + 15px);
+            left: 16px;
+            right: 16px;
             display: flex; 
+            justify-content: space-between; 
             align-items: center; 
-            justify-content: center; 
-            z-index: 1; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            height: 35px; 
+            transition: color 0.3s; 
         }
-        .enemy-image-area img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: contain; 
+        @media (min-width: 500px) and (min-height: 700px) {
+            .status-bar { top: 20px; left: 20px; right: 20px; }
         }
+        .quit-btn { background: rgba(0,0,0,0.08); color: inherit; padding: 5px 14px; font-size: 0.9rem; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; }
+        .quit-btn:active { background: rgba(0,0,0,0.15); }
 
-        .enemy-hand { font-size: 5.5rem; height: 120px; width: 120px; display: flex; align-items: center; justify-content: center; background: #e9ecef; border-radius: 50%; transition: transform 0.15s; z-index: 1; }
+        /* キャラクターゾーン：ここも高さを固定し、顔の位置を一定にキープ */
+        .character-zone { width: 100%; display: flex; justify-content: center; padding: 0; margin-top: 40px; }
+        .stage-box { width: 100%; height: 280px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+        
+        .enemy-image-area { width: 100%; max-width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; z-index: 1; }
+        .enemy-image-area img { width: 100%; height: 100%; object-fit: contain; }
+
+        .enemy-hand { font-size: 3.5rem; height: 75px; width: 75px; display: flex; align-items: center; justify-content: center; background: #e9ecef; border-radius: 50%; transition: transform 0.1s; z-index: 1; color: initial; }
         
         .voice-text { 
-            font-size: 3.2rem; 
+            font-size: 2.6rem; 
             font-weight: 900; 
             color: #ffffff; 
-            text-shadow: -3px -3px 0 #e91e63, 3px -3px 0 #e91e63, -3px 3px 0 #e91e63, 3px 3px 0 #e91e63, 0 6px 12px rgba(0,0,0,0.3); 
+            text-shadow: -3px -3px 0 #e91e63, 3px -3px 0 #e91e63, -3px 3px 0 #e91e63, 3px 3px 0 #e91e63, 0 4px 8px rgba(0,0,0,0.3); 
             z-index: 10; 
             white-space: nowrap;
             pointer-events: none;
-            margin: 10px 0;
-            animation: popText 0.15s ease-out;
+            margin: 2px 0;
+            animation: popText 0.12s ease-out;
         }
 
         @keyframes popText {
-            0% { transform: scale(0.7); opacity: 0; }
+            0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
         
-        .controls { min-height: 200px; display: flex; align-items: center; justify-content: center; }
-        .janken-controls { display: flex; gap: 24px; }
-        .janken-btn { font-size: 3.5rem; background: #f8f9fa; border: 4px solid #4A90E2; border-radius: 50%; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; padding:0; }
+        /* ★コントロールエリア：余計なflex-growを廃止。❓のすぐ下に隙間なくボタンが配置されます */
+        .controls { width: 100%; display: flex; justify-content: center; align-items: flex-start; margin-top: 15px; }
+        .janken-controls { display: flex; gap: 20px; }
+        .janken-btn { font-size: 2.8rem; background: #f8f9fa; border: 3px solid #4A90E2; border-radius: 50%; width: 78px; height: 78px; display: flex; align-items: center; justify-content: center; padding:0; }
         
-        .hoi-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; width: 280px; }
-        .hoi-btn { font-size: 2.5rem; background: #f8f9fa; border: 4px solid #ff9800; border-radius: 20px; height: 80px; display: flex; align-items: center; justify-content: center; padding:0; }
+        .hoi-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 220px; }
+        .hoi-btn { font-size: 2rem; background: #f8f9fa; border: 3px solid #ff9800; border-radius: 14px; height: 52px; display: flex; align-items: center; justify-content: center; padding:0; }
         .hoi-btn:nth-child(1) { grid-column: 2; }
         .hoi-btn:nth-child(2) { grid-column: 1; grid-row: 2; }
         .hoi-btn:nth-child(3) { grid-column: 3; grid-row: 2; }
         .hoi-btn:nth-child(4) { grid-column: 2; grid-row: 3; }
 
-        #result-screen { justify-content: center; gap: 50px; }
+        #result-screen { justify-content: center; gap: 40px; }
+        #result-screen button { background: #4A90E2; color: white; }
         .result-title { font-size: 4rem; font-weight: bold; }
         .win { color: #28a745; }
         .lose { color: #dc3545; }
@@ -97,23 +126,26 @@
 </head>
 <body>
 
-<div id="app">
+<div id="app" class="bg-normal">
+    <!-- 1. スタート画面 -->
     <div id="start-screen" class="screen active">
         <h1>あっちむいてホイ！</h1>
         <div class="difficulty-select">
-            <label>あいてのつよさ</label>
+            <label>あっちむいてホイ！</label>
             <button class="diff-btn selected" onclick="setDifficulty(300, this)">よわい (ゆっくり)</button>
             <button class="diff-btn" onclick="setDifficulty(150, this)">ふつう (はやい)</button>
             <button class="diff-btn" onclick="setDifficulty(60, this)">つよい (超高速)</button>
         </div>
-        <button onclick="startGame()">ゲームスタート</button>
+        <div style="width: 85%; margin: 0 auto;">
+            <button style="width: 100%;" onclick="startGame()">ゲームスタート</button>
+        </div>
     </div>
 
+    <!-- 2. ゲーム画面 -->
     <div id="game-screen" class="screen">
         <div class="status-bar">
             <span id="match-count">第 1 回戦</span>
             <span>あいて：キャラクター</span>
-            <!-- ★新設：右端に配置したやめるボタン -->
             <button class="quit-btn" onclick="quitGame()">やめる</button>
         </div>
         
@@ -142,6 +174,7 @@
         </div>
     </div>
 
+    <!-- 3. 結果画面 -->
     <div id="result-screen" class="screen">
         <div id="result-text" class="result-title"></div>
         <button onclick="resetGame()">もういちど遊ぶ</button>
@@ -160,6 +193,16 @@
     };
 
     let enemySpeed = 300, loopInterval = null, jankenResult = "", currentHandIndex = 0, matchRound = 1;
+    let isDrawRound = false; 
+
+    function updateBackgroundColor(status) {
+        const app = document.getElementById('app');
+        app.classList.remove('bg-normal', 'bg-player', 'bg-enemy');
+        
+        if (status === 'normal') app.classList.add('bg-normal');
+        if (status === 'player') app.classList.add('bg-player');
+        if (status === 'enemy')  app.classList.add('bg-enemy');
+    }
 
     function setVoiceText(text) {
         const el = document.getElementById('voice-display');
@@ -184,13 +227,21 @@
         changeScreen('game-screen');
         document.getElementById('match-count').innerText = `第 ${matchRound} 回戦`;
         document.getElementById('enemy-avatar-display').src = enemyImages['正面'];
+        isDrawRound = false; 
+        updateBackgroundColor('normal'); 
         startJankenLoop();
     }
 
     function startJankenLoop() {
         document.getElementById('janken-ui').style.display = 'flex';
         document.getElementById('hoi-ui').setAttribute("style", "display:none;");
-        setVoiceText("じゃーんけーん…");
+        
+        if (isDrawRound) {
+            setVoiceText("あいこで…");
+        } else {
+            setVoiceText("じゃーんけーん…");
+        }
+        
         loopInterval = setInterval(() => {
             currentHandIndex = (currentHandIndex + 1) % hands.length;
             document.getElementById('enemy-hand-display').innerText = hands[currentHandIndex];
@@ -199,12 +250,19 @@
 
     function playJanken(playerHand) {
         clearInterval(loopInterval);
-        setVoiceText("ぽん！");
+        
+        if (isDrawRound) {
+            setVoiceText("しょ！");
+        } else {
+            setVoiceText("ぽん！");
+        }
+        
         const enemyHand = hands[Math.floor(Math.random() * hands.length)];
         document.getElementById('enemy-hand-display').innerText = enemyHand;
 
         if (playerHand === enemyHand) {
             jankenResult = "draw";
+            isDrawRound = true; 
             setTimeout(() => { startJankenLoop(); }, 1200);
             return;
         } else if (
@@ -216,6 +274,13 @@
         } else {
             jankenResult = "enemy_attack";  
         }
+        
+        if (jankenResult === "player_attack") {
+            updateBackgroundColor('player'); 
+        } else {
+            updateBackgroundColor('enemy');  
+        }
+
         setTimeout(() => { setupHoi(); }, 1000);
     }
 
@@ -235,7 +300,7 @@
         const handDisplay = document.getElementById('enemy-hand-display');
 
         if (jankenResult === "player_attack") {
-            avatar.src = enemyImages[enemyDirKey];
+            avatar.src = enemyImages[enemyDirKey]; 
             handDisplay.innerText = "👉";
             rotateFinger(handDisplay, playerDir);
         } else {
@@ -252,8 +317,9 @@
                 if (jankenResult === "player_attack") { endGame("win"); } 
                 else { endGame("lose"); }
             } else {
+                isDrawRound = false; 
                 matchRound++;
-                startGame();
+                startGame(); 
             }
         }, 1500);
     }
@@ -266,6 +332,7 @@
     }
 
     function endGame(finalResult) {
+        updateBackgroundColor('normal');
         const resultText = document.getElementById('result-text');
         if (finalResult === "win") {
             resultText.innerText = "かち！🏆";
@@ -277,15 +344,16 @@
         changeScreen('result-screen');
     }
 
-    // ★新設：ゲームを安全に中断して最初の画面に戻る処理
     function quitGame() {
-        clearInterval(loopInterval); // 動いているじゃんけんのタイマーを確実に止める
-        matchRound = 1; // 回戦数をリセット
-        changeScreen('start-screen'); // スタート画面へ戻る
+        clearInterval(loopInterval); 
+        matchRound = 1; 
+        updateBackgroundColor('normal');
+        changeScreen('start-screen'); 
     }
 
     function resetGame() {
         matchRound = 1;
+        updateBackgroundColor('normal');
         changeScreen('start-screen');
     }
 
