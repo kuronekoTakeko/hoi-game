@@ -230,7 +230,7 @@
 
  <!-- 6. 完全優勝おめでとう画面 -->
  <div id="champion-screen" class="screen">
- <div class="champion-title">完全優勝!! 🏆</div>
+ <div class="champion-title">🏆 完全優勝!! 🏆</div>
  <div class="trophy-box">🥇</div>
  <div class="dialogue-box" style="background: rgba(255,255,255,0.6); border: 2px solid #ffcc00;">
  <p class="champion-msg">すべての強敵を打ち破り、あっちむいてホイ界の頂点に立ちました！偉大なチャンピオンに拍手！</p>
@@ -239,21 +239,61 @@
  </div>
 </div>
 <script>
- const hands = ['✊', '✌', '🖐'];
+  const hands = ['✊', '✌', '🖐'];
  const dirKeys = ['上', '下', '左', '右'];
+ 
+ // 基本の画像（ノビオ、熱血ハヤト、および全般のベース用）
  const enemyImages = { 
  '正面': 'front.png', '上': 'up.png', '下': 'down.png', '左': 'left.png', '右': 'right.png'
  };
  Object.values(enemyImages).forEach(src => { 
  const img = new Image(); img.src = src; 
  });
+
+ // キャラクターごとの個別設定（すべて半角スペース区切りに統一）
  const internalEnemies = [
  { name: "ノビオ", position: "ライバル", intro: "ずっと練習してたんだ！負けないぞー！", win: "ボクの勝ち！", lose: "うわ〜ん！敗けた！", favAttackDirs: ['下','下','下','上','左','右'], favDefendDirs: ['上','上','上','下','左','右'] },
- { name: "お嬢様", position: "ライバル", intro: "オーッホッホ！わたくしの敵ではありませんわ！", win: "当然の結果ですわ。", lose: "敗北するなんて…おのれ！", favAttackDirs: ['上','上','上','下','左','右'], favDefendDirs: ['右','右','右','上','下','左'] },
- { name: "熱血ハヤト", position: "ライバル", intro: "俺のパッションは誰にも止められねえ！", win: "うおっしゃあ！勝ちだ！", lose: "クソッ、燃え尽きたぜ…", favAttackDirs: ['右','右','右','上','下','左'], favDefendDirs: ['左','左','左','上','下','右'] },
- { name: "忍者コタロウ", position: "ライバル", intro: "拙者の高速の術、見切れるでござるか？", win: "忍法あっちむいての術！", lose: "完全に見破られるとは…", favAttackDirs: ['左','右','左','右','上','下'], favDefendDirs: ['上','下','上','下','左','右'] },
- { name: "マッド科学者", position: "ライバル", intro: "君の癖はすべて計算通りなのだよ！", win: "計算通りの勝利！", lose: "計算を上回る超直感だと！？", favAttackDirs: ['上','下','上','下','左','右'], favDefendDirs: ['左','右','左','右','上','下'] },
- { name: "ガチ勢レイ", position: "ライバル", intro: "フレーム単位で君の手は見えているよ。", win: "完全な実力さ。", lose: "君、すごい反射神経だね。", favAttackDirs: ['上','右','上','右','下','左'], favDefendDirs: ['下','left','下','左','上','右'] },
+ { 
+ name: "お嬢様", 
+ position: "ライバル", 
+ intro: "オーッホッホ！わたくしの敵ではありませんわ！", 
+ win: "当然の結果ですわ。", 
+ lose: "敗北するなんて…おのれ！", 
+ favAttackDirs: ['上','上','上','下','左','右'], 
+ favDefendDirs: ['右','右','右','上','下','右'],
+ images: { '正面': 'princess front.png', '上': 'princess up.png', '下': 'princess down.png', '左': 'princess left.png', '右': 'princess right.png' }
+ },
+ { name: "熱血ハヤト", position: "ライバル", intro: "俺のパッションは誰にも止められねえ！", win: "うおっしゃあ！勝ちだ！", lose: "クソッ、燃え尽きたぜ…", favAttackDirs: ['右','右','右','上','下','左'], favDefendDirs: ['left','左','左','上','下','右'] },
+ { 
+ name: "忍者コタロウ", 
+ position: "ライバル", 
+ intro: "拙者の高速の術、見切れるでござるか？", 
+ win: "忍法あっちむいての術！", 
+ lose: "完全に見破られるとは…", 
+ favAttackDirs: ['左','右','左','右','上','下'], 
+ favDefendDirs: ['上','下','上','下','左','右'],
+ images: { '正面': 'ninja boy front.png', '上': 'ninja boy up.png', '下': 'ninja boy down.png', '左': 'ninja boy left.png', '右': 'ninja boy right.png' }
+ },
+ { 
+ name: "マッド科学者", 
+ position: "ライバル", 
+ intro: "君の癖はすべて計算通りなのだよ！", 
+ win: "計算通りの勝利！", 
+ lose: "計算を上回る超直感だと！？", 
+ favAttackDirs: ['上','下','上','下','左','右'], 
+ favDefendDirs: ['左','右','左','右','上','下'],
+ images: { '正面': 'mad scientist front.png', '上': 'mad scientist up.png', '下': 'mad scientist down.png', '左': 'mad scientist left.png', '右': 'mad scientist right.png' }
+ },
+ { 
+ name: "ゲーマー レイ", 
+ position: "ライバル", 
+ intro: "フレーム単位で君の手は見えているよ。", 
+ win: "完全な実力さ。", 
+ lose: "君、すごい反射神経だね。", 
+ favAttackDirs: ['上','右','上','右','下','左'], 
+ favDefendDirs: ['下','左','下','左','上','右'],
+ images: { '正面': 'gamer front.png', '上': 'gamer up.png', '下': 'gamer down.png', '左': 'gamer left.png', '右': 'gamer right.png' }
+ },
  { 
  name: "魔王ダーク", 
  position: "ライバル", 
@@ -262,15 +302,10 @@
  lose: "我が魔王の座が崩れ去るとは…", 
  favAttackDirs: ['上','左','右','下'], 
  favDefendDirs: ['上','左','右','下'],
- images: {
- '正面': 'demon king front.png',
- '上': 'demon king up.png',
- '下': 'demon king down.png',
- '左': 'demon king left.png',
- 'right': 'demon king right.png'
- }
+ images: { '正面': 'demon king front.png', '上': 'demon king up.png', '下': 'demon king down.png', '左': 'demon king left.png', '右': 'demon king right.png' }
  }
  ];
+
  let gameMode = '1shot', currentStage = 'round1', currentEnemy = null, poolEnemies = [], 
  playerScore = 0, enemyScore = 0, maxWinsNeeded = 1, enemySpeed = 300,
  loopInterval = null, jankenResult = "", currentHandIndex = 0, isDrawRound = false, 
