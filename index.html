@@ -1,372 +1,520 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>オリジナルあっちむいてホイ</title>
-    <meta name="theme-color" content="#4A90E2">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        
-        html, body { 
-            background: #f0f2f5; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            width: 100%;
-            height: 100%;
-            overflow: hidden; 
-            position: fixed; 
-        }
-        
-        #app { 
-            width: 100%; 
-            max-width: 500px; 
-            height: 100%; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden; 
-            padding: calc(env(safe-area-inset-top) + 15px) 16px calc(env(safe-area-inset-bottom) + 20px) 16px; 
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        #app.bg-normal { background-color: #e8f5e9; color: #2e7d32; }
-        #app.bg-player { background-color: #e3f2fd; color: #1565c0; }
-        #app.bg-enemy  { background-color: #ffebee; color: #c62828; }
-
-        @media (min-width: 500px) and (min-height: 700px) {
-            #app { height: 95%; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); padding: 20px; }
-        }
-
-        /* ★screen全体に「上下左右中央寄せ」を設定し、中身のパーツがバラバラに広がらないように固定 */
-        .screen { 
-            display: none; 
-            flex-direction: column; 
-            height: 100%; 
-            width: 100%; 
-            text-align: center; 
-            justify-content: center; /* 縦方向の中央寄せ */
-            align-items: center;     /* 横方向の中央寄せ */
-            gap: 15px;               /* パーツ間の適度な隙間 */
-        }
-        .screen.active { display: flex; }
-        
-        button { background: #4A90E2; color: white; border: none; padding: 16px 32px; font-size: 1.4rem; font-weight: bold; border-radius: 50px; cursor: pointer; }
-        
-        #start-screen { gap: 45px; }
-        #start-screen h1 { color: #333; }
-        .difficulty-select { display: flex; flex-direction: column; gap: 12px; width: 85%; margin: 0 auto; font-size: 1.1rem; color: #555; }
-        .diff-btn { background: #6c757d; padding: 12px; font-size: 1.1rem; color: white; }
-        .diff-btn.selected { background: #28a745; }
-
-        /* ステータスバーは一番上に固定したいので、絶対配置（absolute）にして中央寄せの影響を受けないように隔離 */
-        .status-bar { 
-            position: absolute;
-            top: calc(env(safe-area-inset-top) + 15px);
-            left: 16px;
-            right: 16px;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            height: 35px; 
-            transition: color 0.3s; 
-        }
-        @media (min-width: 500px) and (min-height: 700px) {
-            .status-bar { top: 20px; left: 20px; right: 20px; }
-        }
-        .quit-btn { background: rgba(0,0,0,0.08); color: inherit; padding: 5px 14px; font-size: 0.9rem; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; }
-        .quit-btn:active { background: rgba(0,0,0,0.15); }
-
-        /* キャラクターゾーン：ここも高さを固定し、顔の位置を一定にキープ */
-        .character-zone { width: 100%; display: flex; justify-content: center; padding: 0; margin-top: 40px; }
-        .stage-box { width: 100%; height: 280px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
-        
-        .enemy-image-area { width: 100%; max-width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; z-index: 1; }
-        .enemy-image-area img { width: 100%; height: 100%; object-fit: contain; }
-
-        .enemy-hand { font-size: 3.5rem; height: 75px; width: 75px; display: flex; align-items: center; justify-content: center; background: #e9ecef; border-radius: 50%; transition: transform 0.1s; z-index: 1; color: initial; }
-        
-        .voice-text { 
-            font-size: 2.6rem; 
-            font-weight: 900; 
-            color: #ffffff; 
-            text-shadow: -3px -3px 0 #e91e63, 3px -3px 0 #e91e63, -3px 3px 0 #e91e63, 3px 3px 0 #e91e63, 0 4px 8px rgba(0,0,0,0.3); 
-            z-index: 10; 
-            white-space: nowrap;
-            pointer-events: none;
-            margin: 2px 0;
-            animation: popText 0.12s ease-out;
-        }
-
-        @keyframes popText {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        /* ★コントロールエリア：余計なflex-growを廃止。❓のすぐ下に隙間なくボタンが配置されます */
-        .controls { width: 100%; display: flex; justify-content: center; align-items: flex-start; margin-top: 15px; }
-        .janken-controls { display: flex; gap: 20px; }
-        .janken-btn { font-size: 2.8rem; background: #f8f9fa; border: 3px solid #4A90E2; border-radius: 50%; width: 78px; height: 78px; display: flex; align-items: center; justify-content: center; padding:0; }
-        
-        .hoi-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 220px; }
-        .hoi-btn { font-size: 2rem; background: #f8f9fa; border: 3px solid #ff9800; border-radius: 14px; height: 52px; display: flex; align-items: center; justify-content: center; padding:0; }
-        .hoi-btn:nth-child(1) { grid-column: 2; }
-        .hoi-btn:nth-child(2) { grid-column: 1; grid-row: 2; }
-        .hoi-btn:nth-child(3) { grid-column: 3; grid-row: 2; }
-        .hoi-btn:nth-child(4) { grid-column: 2; grid-row: 3; }
-
-        #result-screen { justify-content: center; gap: 40px; }
-        #result-screen button { background: #4A90E2; color: white; }
-        .result-title { font-size: 4rem; font-weight: bold; }
-        .win { color: #28a745; }
-        .lose { color: #dc3545; }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ <title>あっちむいてホイ！トーナメント</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+ html, body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; overflow: hidden; position: fixed; }
+ 
+ /* アプリ全体コンテナ */
+ #app { 
+ width: 100%; 
+ height: 100%; 
+ display: flex; 
+ flex-direction: column; 
+ overflow: hidden; 
+ padding: calc(env(safe-area-inset-top) + 15px) 5% calc(env(safe-area-inset-bottom) + 20px) 5%; 
+ transition: background 0.3s; 
+ }
+ #app.bg-normal { background: #e8f5e9; color: #2e7d32; }
+ #app.bg-player { background: #e3f2fd; color: #1565c0; }
+ #app.bg-enemy { background: #ffebee; color: #c62828; }
+ #app.bg-champion { background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%); color: #b78103; }
+ 
+ /* 画面切り替え制御 */
+ .screen { 
+ display: none !important; 
+ flex-direction: column; 
+ height: 100%; 
+ width: 100%; 
+ text-align: center; 
+ justify-content: center; 
+ align-items: center; 
+ gap: 2vh; 
+ pointer-events: none; 
+ position: relative; 
+ }
+ .screen.active { 
+ display: flex !important; 
+ }
+ 
+ button { background: #4A90E2; color: white; border: none; padding: 16px 32px; font-size: 1.3rem; font-weight: bold; border-radius: 50px; cursor: pointer; display: block; line-height: 1.2; width: 100%; max-width: 380px; text-align: center; pointer-events: auto; }
+ button:active { opacity: 0.8; }
+ 
+ /* タイトル画面 */
+ #start-screen { gap: 4vh; }
+ #start-screen h1 { color: #333; font-size: min(8vw, 4vh); white-space: nowrap; letter-spacing: -1px; width: 100%; text-align: center; } 
+ 
+ .mode-select { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; pointer-events: auto; }
+ .mode-title-label { font-size: 1.2rem; font-weight: bold; color: #555; margin-bottom: 5px; }
+ .mode-btn { background: #6c757d; width: 90%; max-width: 320px; }
+ .mode-btn.selected { background: #28a745; }
+ 
+ .join-btn-container { width: 100%; display: flex; justify-content: center; padding: 10px 0; pointer-events: auto; z-index: 10; }
+ .main-join-btn { background: #ff9800; width: 95%; max-width: 360px; font-size: 1.4rem; box-shadow: 0 5px 15px rgba(255,152,0,0.4); }
+ /* 下から上（逆山型）トーナメント表レイアウト */
+ #chart-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1vh 0; gap: 2vh; height: 100%; width: 100%; }
+ .chart-box { width: 95%; max-width: 800px; height: 62vh; background: rgba(255, 255, 255, 0.85); padding: 2vh 15px; border-radius: 15px; border: 1px solid rgba(0,0,0,0.1); pointer-events: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; }
+ .tournament-container { display: grid; grid-template-rows: repeat(4, 1fr); align-items: center; width: 100%; height: 100%; }
+ .tournament-round { display: flex; flex-direction: row; justify-content: space-around; width: 100%; position: relative; }
+ .match-slot { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 12.5%; position: relative; }
+ 
+ .player-node { background: #ffffff; border: 1px solid #ccc; padding: 4px; font-size: min(2.8vw, 1.4vh, 14px); font-weight: bold; text-align: center; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); writing-mode: vertical-rl; text-orientation: mixed; white-space: nowrap; height: 11vh; width: min(85%, 45px); display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+ .match-slot.my-match .player-node { border-color: #28a745; }
+ .player-node.is-me { background: #e3f2fd; color: #1565c0; border-color: #1565c0; }
+ .player-node.is-winner { border-color: #ff9800; background: #fffde7; }
+ .tournament-round:not(:last-child) .match-slot::after { content: ""; position: absolute; bottom: -2.5vh; left: 50%; width: 2px; height: 2.5vh; background: #ccc; z-index: 1; }
+ #chart-start-btn { white-space: nowrap; font-size: min(4.5vw, 2.1vh, 22px); padding: 1.5vh 24px; width: 95%; max-width: 480px; height: auto; margin: 0 auto; box-shadow: 0 4px 12px rgba(40,167,69,0.2); }
+ /* バトル・結果画面の装飾 */
+ .dialogue-box { background: rgba(0,0,0,0.05); padding: 14px; border-radius: 15px; width: 90%; font-size: 1.1rem; font-weight: bold; line-height: 1.4; min-height: 70px; display: flex; align-items: center; justify-content: center; color: #333; pointer-events: auto; }
+ .status-bar { position: absolute; top: calc(env(safe-area-inset-top) + 15px); left: 24px; right: 24px; display: flex; justify-content: center; align-items: center; gap: 15px; font-size: 1.1rem; font-weight: bold; height: 35px; pointer-events: auto; white-space: nowrap; }
+ @media (min-width: 500px) and (min-height: 700px) { .status-bar { top: 20px; left: 24px; right: 24px; } }
+ .quit-btn { background: rgba(0,0,0,0.06); color: #666; padding: 8px 24px; font-size: 0.9rem; border-radius: 20px; font-weight: bold; border: 1px solid rgba(0,0,0,0.1); cursor: pointer; width: auto; max-width: 150px; margin-top: 10px; pointer-events: auto; }
+ .quit-btn:active { opacity: 0.7; }
+ .controls { width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 15px; pointer-events: auto; gap: 10px; }
+ .score-bar { font-size: 1.1rem; font-weight: bold; margin-top: 35px; height: 25px; pointer-events: auto; }
+ .character-zone { width: 100%; display: flex; justify-content: center; margin-top: 10px; pointer-events: auto; }
+ .stage-box { width: 100%; height: 260px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+ .enemy-image-area { width: 100%; max-width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; z-index: 1; }
+ .enemy-image-area img { width: 100%; height: 100%; object-fit: contain; }
+ .enemy-hand { font-size: 3.5rem; height: 75px; width: 75px; display: flex; align-items: center; justify-content: center; background: #e9ecef; border-radius: 50%; z-index: 1; color: initial; }
+ .janken-controls { display: flex; gap: 20px; }
+ .janken-btn { font-size: 2.8rem; background: #f8f9fa; border: 3px solid #4A90E2; border-radius: 50%; width: 75px; height: 75px; display: flex; align-items: center; justify-content: center; padding: 0; }
+ .hoi-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 220px; }
+ .hoi-btn { font-size: 2rem; background: #f8f9fa; border: 3px solid #ff9800; border-radius: 14px; height: 52px; display: flex; align-items: center; justify-content: center; padding: 0; }
+ .hoi-btn:nth-child(1) { grid-column: 2; }
+ .hoi-btn:nth-child(2) { grid-column: 1; grid-row: 2; }
+ .hoi-btn:nth-child(3) { grid-column: 3; grid-row: 2; }
+ .hoi-btn:nth-child(4) { grid-column: 2; grid-row: 3; }
+ 
+ .result-title { font-size: min(9vw, 4.5vh, 40px); font-weight: bold; pointer-events: auto; white-space: nowrap; }
+ .win { color: #28a745; }
+ .lose { color: #dc3545; }
+ .champion-title { font-size: min(10vw, 4.5vh); font-weight: 900; text-shadow: 0 4px 10px rgba(183,129,3,0.2); animation: scaleUp 0.6s ease-out forwards; }
+ .trophy-box { font-size: min(20vw, 10vh); line-height: 1; animation: floatAnim 2s ease-in-out infinite; margin: 15px 0; }
+ .champion-msg { font-size: 1.15rem; font-weight: bold; color: #6d4c00; line-height: 1.6; max-width: 340px; margin: 0 auto; }
+ @keyframes scaleUp { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+ @keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+ /* 掛け声を大きく飛び出させる設定 */
+.voice-text {
+  font-size: 2.5rem !important; /* 文字を圧倒的に大きく */
+  font-weight: 900 !important;  /* 極太にする */
+  color: #ff5722 !important;    /* 目立つオレンジ赤 */
+  text-shadow: 2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 0 4px 8px rgba(0,0,0,0.3) !important; /* 白いフチと影 */
+  margin: 10px 0;
+  display: inline-block;
+}
+/* 飛び出すアニメーションの動き */
+@keyframes popOutBounce {
+  0% { transform: scale(0.3); opacity: 0; }
+  70% { transform: scale(1.3); } /* 一度オーバーに大きく */
+  100% { transform: scale(1); opacity: 1; }
+}
+ </style>
 </head>
 <body>
-
 <div id="app" class="bg-normal">
-    <!-- 1. スタート画面 -->
-    <div id="start-screen" class="screen active">
-        <h1>あっちむいてホイ！</h1>
-        <div class="difficulty-select">
-            <label>あっちむいてホイ！</label>
-            <button class="diff-btn selected" onclick="setDifficulty(300, this)">よわい (ゆっくり)</button>
-            <button class="diff-btn" onclick="setDifficulty(150, this)">ふつう (はやい)</button>
-            <button class="diff-btn" onclick="setDifficulty(60, this)">つよい (超高速)</button>
-        </div>
-        <div style="width: 85%; margin: 0 auto;">
-            <button style="width: 100%;" onclick="startGame()">ゲームスタート</button>
-        </div>
-    </div>
+ <!-- 1. スタート画面 -->
+ <div id="start-screen" class="screen active">
+ <h1>あっちむいてホイ！</h1>
+ <div class="mode-select">
+ <div class="mode-title-label">ルールをえらんでね</div>
+ <button class="mode-btn selected" onclick="setGameMode('1shot', this)">1発勝負 (KO)</button>
+ <button class="mode-btn" onclick="setGameMode('3wins', this)">3本先取</button>
+ </div>
+ <div class="join-btn-container">
+ <button class="main-join-btn" onclick="startTournament()">トーナメントに参戦！</button>
+ </div>
+ </div>
 
-    <!-- 2. ゲーム画面 -->
-    <div id="game-screen" class="screen">
-        <div class="status-bar">
-            <span id="match-count">第 1 回戦</span>
-            <span>あいて：キャラクター</span>
-            <button class="quit-btn" onclick="quitGame()">やめる</button>
-        </div>
-        
-        <div class="character-zone">
-            <div class="stage-box">
-                <div class="enemy-image-area">
-                    <img id="enemy-avatar-display" src="front.png" alt="あいて">
-                </div>
-                <div class="voice-text" id="voice-display">じゃーんけーん…</div>
-                <div class="enemy-hand" id="enemy-hand-display">✊</div>
-            </div>
-        </div>
-        
-        <div class="controls">
-            <div id="janken-ui" class="janken-controls">
-                <button class="janken-btn" onclick="playJanken('✊')">✊</button>
-                <button class="janken-btn" onclick="playJanken('✌️')">✌️</button>
-                <button class="janken-btn" onclick="playJanken('🖐️')">🖐️</button>
-            </div>
-            <div id="hoi-ui" class="hoi-controls" style="display: none;">
-                <button class="hoi-btn" onclick="playHoi('👆')">👆</button>
-                <button class="hoi-btn" onclick="playHoi('👈')">👈</button>
-                <button class="hoi-btn" onclick="playHoi('👉')">👉</button>
-                <button class="hoi-btn" onclick="playHoi('👇')">👇</button>
-            </div>
-        </div>
-    </div>
+ <!-- 2. トーナメント表画面 -->
+ <div id="chart-screen" class="screen">
+ <h2 style="font-size: 1.4rem;">トーナメント表 🏆</h2>
+ <div class="chart-box" id="chart-box-container"></div>
+ <button id="chart-start-btn" style="background: #28a745;" onclick="proceedToIntro()">試合にすすむ！</button>
+ </div>
 
-    <!-- 3. 結果画面 -->
-    <div id="result-screen" class="screen">
-        <div id="result-text" class="result-title"></div>
-        <button onclick="resetGame()">もういちど遊ぶ</button>
-    </div>
+ <!-- 3. 对戦前イントロ画面 -->
+ <div id="intro-screen" class="screen">
+ <div class="intro-title" id="tournament-stage-title" style="font-size: 1.8rem; font-weight: bold;">1回戦</div>
+ <h2 id="intro-matchup" style="font-size: 1.2rem; color:#555;">プレイヤー VS ？？？</h2>
+ <div class="enemy-image-area" style="max-width: 120px; height: 120px;"><img id="intro-enemy-img" src="front.png" alt="敵"></div>
+ <div class="dialogue-box" id="intro-dialogue">...</div>
+ <button style="background: #ff9800;" onclick="startBattle()">バトルスタート！</button>
+ </div>
+
+ <!-- 4. バトルメイン画面 -->
+ <div id="game-screen" class="screen">
+ <div class="status-bar">
+ <span id="match-count">1回戦</span>
+ <span id="enemy-name">あいて：ーー</span>
+ </div>
+ <div class="score-bar" id="score-display">★ 0 - 0 ★</div>
+ <div class="character-zone">
+ <div class="stage-box">
+ <div class="enemy-image-area"><img id="enemy-avatar-display-img" src="front.png" alt="あいて"></div>
+ <div class="voice-text" id="voice-display">じゃーんけーん…</div>
+ <div class="enemy-hand" id="enemy-hand-display">✊</div>
+ </div>
+ </div>
+ <div class="controls">
+ <div id="janken-ui" class="janken-controls">
+ <button class="janken-btn" onclick="playJanken('✊')">✊</button>
+ <button class="janken-btn" onclick="playJanken('✌')">✌</button>
+ <button class="janken-btn" onclick="playJanken('🖐')">🖐</button>
+ </div>
+ <div id="hoi-ui" class="hoi-controls" style="display: none;">
+ <button class="hoi-btn" onclick="playHoi('上')">👆</button>
+ <button class="hoi-btn" onclick="playHoi('左')">👈</button>
+ <button class="hoi-btn" onclick="playHoi('右')">👉</button>
+ <button class="hoi-btn" onclick="playHoi('下')">👇</button>
+ </div>
+ <button class="quit-btn" onclick="quitGame()">棄権する</button>
+ </div>
+ </div>
+
+ <!-- 5. 通常の結果画面 -->
+ <div id="result-screen" class="screen">
+ <div id="result-text" class="result-title"></div>
+ <div class="dialogue-box" id="result-dialogue">...</div>
+ <button id="result-next-btn" onclick="nextStep()">次へすすむ</button>
+ </div>
+
+ <!-- 6. 完全優勝おめでとう画面 -->
+ <div id="champion-screen" class="screen">
+ <div class="champion-title">🏆完全優勝!!🏆</div>
+ <div class="trophy-box">🥇</div>
+ <div class="dialogue-box" style="background: rgba(255,255,255,0.6); border: 2px solid #ffcc00;">
+ <p class="champion-msg">すべての強敵を打ち破り、あっちむいてホイ界の頂点に立ちました！偉大なチャンピオンに拍手！</p>
+ </div>
+ <button style="background: #ff9800; margin-top: 15px;" onclick="quitGame()">タイトルへ戻る</button>
+ </div>
 </div>
+
 <script>
-    const hands = ['✊', '✌️', '🖐️'];
-    const dirKeys = ['👆', '👈', '👉', '👇'];
-    
-    const enemyImages = {
-        '正面': 'front.png',
-        '👆': 'up.png',
-        '👇': 'down.png',
-        '👈': 'left.png',
-        '👉': 'right.png'
-    };
+ const hands = ['✊', '✌', '🖐'];
+ const dirKeys = ['上', '下', '左', '右'];
+ const enemyImages = { 
+ '正面': 'front.png', '上': 'up.png', '下': 'down.png', '左': 'left.png', '右': 'right.png'
+ };
 
-    let enemySpeed = 300, loopInterval = null, jankenResult = "", currentHandIndex = 0, matchRound = 1;
-    let isDrawRound = false; 
+ Object.values(enemyImages).forEach(src => { 
+ const img = new Image(); img.src = src; 
+ });
 
-    function updateBackgroundColor(status) {
-        const app = document.getElementById('app');
-        app.classList.remove('bg-normal', 'bg-player', 'bg-enemy');
-        
-        if (status === 'normal') app.classList.add('bg-normal');
-        if (status === 'player') app.classList.add('bg-player');
-        if (status === 'enemy')  app.classList.add('bg-enemy');
-    }
+ const internalEnemies = [
+ { name: "ノビオ", position: "ライバル", intro: "ずっと練習してたんだ！負けないぞー！", win: "ボクの勝ち！", lose: "うわ〜ん！敗けた！", favAttackDirs: ['下','下','下','上','左','右'], favDefendDirs: ['上','上','上','下','左','右'] },
+ { name: "お嬢様", position: "ライバル", intro: "オーッホッホ！わたくしの敵ではありませんわ！", win: "当然の結果ですわ。", lose: "敗北するなんて…おのれ！", favAttackDirs: ['上','上','上','下','左','右'], favDefendDirs: ['右','右','右','上','下','left'] },
+ { name: "熱血ハヤト", position: "ライバル", intro: "俺のパッションは誰にも止められねえ！", win: "うおっしゃあ！勝ちだ！", lose: "クソッ、燃え尽きたぜ…", favAttackDirs: ['右','右','右','上','下','左'], favDefendDirs: ['左','左','左','上','下','右'] },
+ { name: "忍者コタロウ", position: "ライバル", intro: "拙者の高速の術、見切れるでござるか？", win: "忍法あっちむいての術！", lose: "完全に見破られるとは…", favAttackDirs: ['左','右','左','右','上','下'], favDefendDirs: ['上','下','上','下','左','右'] },
+ { name: "マッド科学者", position: "ライバル", intro: "君の癖はすべて計算通りなのだよ！", win: "計算通りの勝利！", lose: "計算を上回る超直感だと！？", favAttackDirs: ['上','下','上','下','左','右'], favDefendDirs: ['左','右','左','右','上','下'] },
+ { name: "ガチ勢レイ", position: "ライバル", intro: "フレーム単位で君の手は見えているよ。", win: "完全な実力さ。", lose: "君、すごい反射神経だね。", favAttackDirs: ['上','右','上','右','下','左'], favDefendDirs: ['下','左','下','左','上','右'] },
+ { 
+   name: "魔王ダーク", 
+   position: "ライバル", 
+   intro: "この最強の恐怖に、君は耐えられるか？", 
+   win: "絶望するが良い！", 
+   lose: "我が魔王の座が崩れ去るとは…", 
+   favAttackDirs: ['上','左','右','下'], 
+   favDefendDirs: ['上','左','右','下'],
+   images: {
+     '正面': 'demon king front.png',
+     '上': 'demon king up.png',
+     '下': 'demon king down.png',
+     '左': 'demon king left.png',
+     '右': 'demon king right.png'
+   }
+ }
+ ];
+ let gameMode = '1shot', currentStage = 'round1', currentEnemy = null, poolEnemies = [], 
+ playerScore = 0, enemyScore = 0, maxWinsNeeded = 1, enemySpeed = 300,
+ loopInterval = null, jankenResult = "", currentHandIndex = 0, isDrawRound = false, 
+ playerIndexInTournament = 0;
+ 
+ let tournamentTree = { 
+ round1: [null, null, null, null], semi: [null, null], final: { p1: null, p2: null, winner: null } 
+ };
 
-    function setVoiceText(text) {
-        const el = document.getElementById('voice-display');
-        el.innerText = text;
-        el.style.animation = 'none';
-        el.offsetHeight; 
-        el.style.animation = null;
-    }
+ function setGameMode(mode, element) { 
+ gameMode = mode; maxWinsNeeded = (mode === '1shot') ? 1 : 3; 
+ document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('selected')); 
+ element.classList.add('selected'); 
+ }
+ 
+ function updateBackgroundColor(status) { 
+ const app = document.getElementById('app'); 
+ app.classList.remove('bg-normal', 'bg-player', 'bg-enemy', 'bg-champion'); 
+ if (status === 'normal') app.classList.add('bg-normal'); 
+ if (status === 'player') app.classList.add('bg-player'); 
+ if (status === 'enemy') app.classList.add('bg-enemy'); 
+ if (status === 'champion') app.classList.add('bg-champion'); 
+ }
+ function setVoiceText(text) { 
+  const el = document.getElementById('voice-display'); 
+  el.innerText = text; 
+  el.style.animation = 'none'; // アニメーションをリセット
+  el.offsetHeight;             // 再描画させるための処理
+  // 毎回新しく飛び出すアニメーションを実行する
+  el.style.animation = 'popOutBounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'; 
+}
 
-    function changeScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
-    }
+ function changeScreen(screenId) { 
+ document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
+ document.getElementById(screenId).classList.add('active'); 
+ }
 
-    function setDifficulty(speed, element) {
-        enemySpeed = speed;
-        document.querySelectorAll('.diff-btn').forEach(btn => btn.classList.remove('selected'));
-        element.classList.add('selected');
-    }
+ function startBattle() { 
+ changeScreen('game-screen'); 
+ document.getElementById('match-count').innerText = currentStage === 'round1' ? "1回戦" : currentStage === 'semi' ? "準決勝" : "決勝戦"; 
+ document.getElementById('enemy-name').innerText = `あいて：${currentEnemy.name}`; 
+ 
+ // 【試合開始時】魔王専用の正面画像があれば使い、なければ共通
+ if (currentEnemy.images && currentEnemy.images['正面']) {
+     document.getElementById('enemy-avatar-display-img').src = currentEnemy.images['正面'];
+ } else {
+     document.getElementById('enemy-avatar-display-img').src = enemyImages['正面']; 
+ }
+ 
+ playerScore = 0; enemyScore = 0; updateScoreDisplay(); isDrawRound = false; startJankenLoop(); 
+ }
 
-    function startGame() {
-        changeScreen('game-screen');
-        document.getElementById('match-count').innerText = `第 ${matchRound} 回戦`;
-        document.getElementById('enemy-avatar-display').src = enemyImages['正面'];
-        isDrawRound = false; 
-        updateBackgroundColor('normal'); 
-        startJankenLoop();
-    }
+ function updateScoreDisplay() { 
+ const el = document.getElementById('score-display'); 
+ el.innerText = gameMode === '1shot' ? " 1発KO勝負 " : `あなた [ ${'★'.repeat(playerScore)}${'☆'.repeat(3 - playerScore)} ] VS [ ${'★'.repeat(enemyScore)}${'☆'.repeat(3 - enemyScore)} ]`; 
+ }
 
-    function startJankenLoop() {
-        document.getElementById('janken-ui').style.display = 'flex';
-        document.getElementById('hoi-ui').setAttribute("style", "display:none;");
-        
-        if (isDrawRound) {
-            setVoiceText("あいこで…");
-        } else {
-            setVoiceText("じゃーんけーん…");
-        }
-        
-        loopInterval = setInterval(() => {
-            currentHandIndex = (currentHandIndex + 1) % hands.length;
-            document.getElementById('enemy-hand-display').innerText = hands[currentHandIndex];
-        }, enemySpeed);
-    }
+ function startJankenLoop() { 
+ document.getElementById('janken-ui').style.display = 'flex'; 
+ document.getElementById('hoi-ui').setAttribute("style", "display:none;"); 
+ setVoiceText(isDrawRound ? "あいこで…" : "じゃーんけーん…"); 
+ clearInterval(loopInterval);
+ loopInterval = setInterval(() => { 
+ if (currentStage === 'round1') { currentHandIndex = (currentHandIndex + 1) % hands.length; } 
+ else { currentHandIndex = Math.floor(Math.random() * hands.length); }
+ document.getElementById('enemy-hand-display').innerText = hands[currentHandIndex]; 
+ }, enemySpeed); 
+ }
 
-    function playJanken(playerHand) {
-        clearInterval(loopInterval);
-        
-        if (isDrawRound) {
-            setVoiceText("しょ！");
-        } else {
-            setVoiceText("ぽん！");
-        }
-        
-        const enemyHand = hands[Math.floor(Math.random() * hands.length)];
-        document.getElementById('enemy-hand-display').innerText = enemyHand;
+ function playJanken(playerHand) {
+ clearInterval(loopInterval); const evh = hands[currentHandIndex]; 
+ document.getElementById('enemy-hand-display').innerText = evh; 
+ setVoiceText(isDrawRound ? "しょ！" : "ぽん！");
+ if (playerHand === evh) { jankenResult = "draw"; isDrawRound = true; setTimeout(() => { startJankenLoop(); }, 1200); return; }
+ if ((playerHand === '✊' && evh === '✌') || (playerHand === '✌' && evh === '🖐') || (playerHand === '🖐' && evh === '✊')) { 
+ jankenResult = "player_attack"; updateBackgroundColor('player'); 
+ } else { 
+ jankenResult = "enemy_attack"; updateBackgroundColor('enemy'); 
+ } 
+ setTimeout(() => { setupHoi(); }, 1000);
+ }
 
-        if (playerHand === enemyHand) {
-            jankenResult = "draw";
-            isDrawRound = true; 
-            setTimeout(() => { startJankenLoop(); }, 1200);
-            return;
-        } else if (
-            (playerHand === '✊' && enemyHand === '✌️') ||
-            (playerHand === '✌️' && enemyHand === '🖐️') ||
-            (playerHand === '🖐️' && enemyHand === '✊')
-        ) {
-            jankenResult = "player_attack"; 
-        } else {
-            jankenResult = "enemy_attack";  
-        }
-        
-        if (jankenResult === "player_attack") {
-            updateBackgroundColor('player'); 
-        } else {
-            updateBackgroundColor('enemy');  
-        }
+ function setupHoi() { 
+ document.getElementById('janken-ui').style.display = 'none'; 
+ document.getElementById('hoi-ui').removeAttribute("style");
+ document.getElementById('enemy-hand-display').innerText = "❓"; 
+ setVoiceText("あっち向いて―"); 
+ }
+ function playHoi(playerDir) {
+ setVoiceText("ほい！"); 
+ document.getElementById('hoi-ui').setAttribute("style", "display:none;");
+ 
+ let ek = jankenResult === "player_attack" ? currentEnemy.favDefendDirs[Math.floor(Math.random() * currentEnemy.favDefendDirs.length)] : currentEnemy.favAttackDirs[Math.floor(Math.random() * currentEnemy.favAttackDirs.length)];
+ const av = document.getElementById('enemy-avatar-display-img'), hd = document.getElementById('enemy-hand-display');
+ 
+ if (jankenResult === "player_attack") { 
+   // 【プレイヤー攻撃時】魔王専用の逃げる方向の画像があれば使い、なければ共通
+   if (currentEnemy.images && currentEnemy.images[ek]) {
+       av.src = currentEnemy.images[ek];
+   } else {
+       av.src = enemyImages[ek]; 
+   }
+   hd.innerText = "👉"; rotateFinger(hd, playerDir); 
+ } else { 
+   // 【敵の攻撃時】魔王専用の正面画像があれば使い、なければ共通
+   if (currentEnemy.images && currentEnemy.images['正面']) {
+       av.src = currentEnemy.images['正面'];
+   } else {
+       av.src = enemyImages['正面']; 
+   }
+   hd.innerText = "👉"; rotateFinger(hd, ek); 
+ }
+ 
+ setTimeout(() => {
+   hd.style.transform = "none"; 
+   
+   // 【タイマー終了時】魔王専用の正面画像があれば戻し、なければ共通
+   if (currentEnemy.images && currentEnemy.images['正面']) {
+       av.src = currentEnemy.images['正面'];
+   } else {
+       av.src = enemyImages['正面'];
+   }
+   
+   if (playerDir === ek) { 
+     if (jankenResult === "player_attack") playerScore++; else enemyScore++; 
+     updateScoreDisplay(); 
+     if (playerScore >= maxWinsNeeded) endBattle("win"); 
+     else if (enemyScore >= maxWinsNeeded) endBattle("lose"); 
+     else { isDrawRound = false; startJankenLoop(); } 
+   } else { isDrawRound = false; updateBackgroundColor('normal'); startJankenLoop(); }
+ }, 1500);
+ }
 
-        setTimeout(() => { setupHoi(); }, 1000);
-    }
+ function rotateFinger(el, dir) { 
+ if(dir === '上') el.style.transform = "rotate(-90deg) scale(1.2)"; 
+ if(dir === '下') el.style.transform = "rotate(90deg) scale(1.2)"; 
+ if(dir === '左') el.style.transform = "scaleX(-1) scale(1.2)"; 
+ if(dir === '右') el.style.transform = "scale(1.2)"; 
+ }
 
-    function setupHoi() {
-        document.getElementById('janken-ui').style.display = 'none';
-        document.getElementById('hoi-ui').removeAttribute("style");
-        document.getElementById('enemy-hand-display').innerText = "❓";
-        setVoiceText("あっち向いて―");
-    }
+ function endBattle(result) {
+ updateBackgroundColor('normal'); 
+ const rt = document.getElementById('result-text'), rd = document.getElementById('result-dialogue'), nb = document.getElementById('result-next-btn');
+ 
+ if (result === "win") { 
+ rt.innerText = " 勝ち抜け！ 🎉"; 
+ rt.className = "result-title win"; 
+ rd.innerHTML = `${currentEnemy.name}：<br>「${currentEnemy.lose}」`; 
+ nb.innerText = "トーナメント表へ"; 
+ } else { 
+ rt.innerText = " 敗北... 😭"; 
+ rt.className = "result-title lose"; 
+ rd.innerHTML = `${currentEnemy.name}：<br>「${currentEnemy.win}」`; 
+ nb.innerText = "タイトルへ"; 
+ } 
+ changeScreen('result-screen');
+ }
 
-    function playHoi(playerDir) {
-        setVoiceText("ほい！");
-        document.getElementById('hoi-ui').setAttribute("style", "display:none;");
+ function startTournament() {
+ currentStage = 'round1'; playerScore = 0; enemyScore = 0;
+ playerIndexInTournament = Math.floor(Math.random() * 8);
+ let allEnemies = [...internalEnemies].sort(() => Math.random() - 0.5);
+ let flatSeats = new Array(8);
+ flatSeats[playerIndexInTournament] = { name: "あなた 👤", isPlayer: true };
+ 
+ let enemyIdx = 0;
+ for (let i = 0; i < 8; i++) {
+ if (i !== playerIndexInTournament) { flatSeats[i] = allEnemies[enemyIdx++]; }
+ }
+ for (let i = 0; i < 4; i++) {
+ tournamentTree.round1[i] = { p1: flatSeats[i * 2], p2: flatSeats[i * 2 + 1], winner: null };
+ }
+ tournamentTree.semi = [ { p1: null, p2: null, winner: null }, { p1: null, p2: null, winner: null } ];
+ tournamentTree.final = { p1: null, p2: null, winner: null };
+ drawTournamentChart(); 
+ changeScreen('chart-screen');
+ }
 
-        const enemyDirKey = dirKeys[Math.floor(Math.random() * dirKeys.length)];
-        const avatar = document.getElementById('enemy-avatar-display');
-        const handDisplay = document.getElementById('enemy-hand-display');
+ function drawTournamentChart() {
+ const container = document.getElementById('chart-box-container'); container.innerHTML = "";
+ let html = `<div class="tournament-container">`;
+ let f = tournamentTree.final; let f1 = f ? f.p1 : null; let f2 = f ? f.p2 : null;
+ let finalWinnerName = "(優勝者)", winnerClass = "player-node";
+ if (f && f.winner) { finalWinnerName = f.winner.name; winnerClass += f.winner.isPlayer ? " is-me is-winner" : " is-winner"; }
+ 
+ html += `<div class="tournament-round">`;
+ for(let k=0; k<3; k++) { html += `<div class="match-slot" style="visibility: hidden;"></div>`; }
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`; 
+ html += `<div class="match-slot"><div class="${winnerClass}" style="border-width:2px; background:#fff9c4;"> ${finalWinnerName} ✨</div></div>`;
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ for(let k=0; k<3; k++) { html += `<div class="match-slot" style="visibility: hidden;"></div>`; }
+ html += `</div>`;
 
-        if (jankenResult === "player_attack") {
-            avatar.src = enemyImages[enemyDirKey]; 
-            handDisplay.innerText = "👉";
-            rotateFinger(handDisplay, playerDir);
-        } else {
-            avatar.src = enemyImages['正面'];
-            handDisplay.innerText = "👉";
-            rotateFinger(handDisplay, enemyDirKey);
-        }
+ html += `<div class="tournament-round">`;
+ [f1, f2].forEach((p, idx) => {
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ let name = p ? p.name : "(勝者)", pClass = (p && p.isPlayer) ? "player-node is-me" : "player-node";
+ if (f && f.winner && f.winner === p) pClass += " is-winner"; 
+ html += `<div class="match-slot"><div class="${pClass}">${f && f.winner === p ? '👑 ' : ''}${name}</div></div>`;
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ });
+ html += `</div>`;
 
-        setTimeout(() => {
-            handDisplay.style.transform = "none";
-            avatar.src = enemyImages['正面'];
+ html += `<div class="tournament-round">`;
+ for (let i = 0; i < 2; i++) {
+ let m = tournamentTree.semi[i], p1 = m ? m.p1 : null, p2 = m ? m.p2 : null;
+ [p1, p2].forEach((p, idx) => {
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ let name = p ? p.name : "(勝者)", pClass = (p && p.isPlayer) ? "player-node is-me" : "player-node";
+ if (m && m.winner && m.winner === p) pClass += " is-winner";
+ html += `<div class="match-slot"><div class="${pClass}">${m && m.winner === p ? '👑 ' : ''}${name}</div></div>`;
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ });
+ }
+ html += `</div>`;
 
-            if (playerDir === enemyDirKey) {
-                if (jankenResult === "player_attack") { endGame("win"); } 
-                else { endGame("lose"); }
-            } else {
-                isDrawRound = false; 
-                matchRound++;
-                startGame(); 
-            }
-        }, 1500);
-    }
+ html += `<div class="tournament-round">`;
+ tournamentTree.round1.forEach((match) => {
+ [match.p1, match.p2].forEach(p => {
+ if (!p) return;
+ let pClass = p.isPlayer ? "player-node is-me" : "player-node";
+ if (match.winner === p) pClass += " is-winner";
+ html += `<div class="match-slot"><div class="${pClass}">${match.winner === p ? '👑 ' : ''}${p.name}</div></div>`;
+ });
+ });
+ html += `</div></div>`;
+ container.innerHTML = html; 
+ updateBattleStartButton();
+ }
 
-    function rotateFinger(element, direction) {
-        if(direction === '👆') element.style.transform = "rotate(-90deg) scale(1.2)";
-        if(direction === '👇') element.style.transform = "rotate(90deg) scale(1.2)";
-        if(direction === '👈') element.style.transform = "scaleX(-1) scale(1.2)";
-        if(direction === '👉') element.style.transform = "scale(1.2)";
-    }
+ function updateBattleStartButton() {
+ let btn = document.getElementById('chart-start-btn'); if (!btn) return;
+ if (currentStage === 'round1') { 
+ let m = tournamentTree.round1.find(m => m && m.p1 && m.p2 && (m.p1.isPlayer || m.p2.isPlayer) && !m.winner); 
+ if (m) { currentEnemy = m.p1.isPlayer ? m.p2 : m.p1; btn.innerText = `${currentEnemy.name}戦に挑む！`; }
+ } else if (currentStage === 'semi') { 
+ let m = tournamentTree.semi.find(m => m && m.p1 && m.p2 && ((m.p1.isPlayer) || (m.p2.isPlayer)) && !m.winner); 
+ if (m) { currentEnemy = m.p1.isPlayer ? m.p2 : m.p1; btn.innerText = `準決勝：${currentEnemy.name} 戦！`; }
+ } else if (currentStage === 'final') { 
+ let m = tournamentTree.final; 
+ if (m && m.p1 && m.p2) { currentEnemy = m.p1.isPlayer ? m.p2 : m.p1; btn.innerText = `決勝戦：${currentEnemy.name}！`; }
+ }
+ }
 
-    function endGame(finalResult) {
-        updateBackgroundColor('normal');
-        const resultText = document.getElementById('result-text');
-        if (finalResult === "win") {
-            resultText.innerText = "かち！🏆";
-            resultText.className = "result-title win";
-        } else {
-            resultText.innerText = "まけ…😭";
-            resultText.className = "result-title lose";
-        }
-        changeScreen('result-screen');
-    }
+ function proceedToIntro() {
+ document.getElementById('tournament-stage-title').innerText = currentStage === 'round1' ? "1回戦" : currentStage === 'semi' ? "準決勝" : "決勝戦";
+ document.getElementById('intro-matchup').innerText = `プレイヤー VS ${currentEnemy.name}`; 
+ document.getElementById('intro-dialogue').innerText = `「${currentEnemy.intro}」`; 
+ 
+ // 【対戦前イントロ画面】魔王専用の正面画像があれば使い、なければ共通
+ if (currentEnemy.images && currentEnemy.images['正面']) {
+     document.getElementById('intro-enemy-img').src = currentEnemy.images['正面'];
+ } else {
+     document.getElementById('intro-enemy-img').src = enemyImages['正面'];
+ }
+ 
+ enemySpeed = currentStage === 'round1' ? 300 : currentStage === 'semi' ? 140 : 60; 
+ changeScreen('intro-screen');
+ }
 
-    function quitGame() {
-        clearInterval(loopInterval); 
-        matchRound = 1; 
-        updateBackgroundColor('normal');
-        changeScreen('start-screen'); 
-    }
+ function nextStep() {
+ if (document.getElementById('result-text').innerText.includes("敗北")) { quitGame(); return; }
+ if (currentStage === 'round1') {
+ let myMatch = tournamentTree.round1.find(m => m && (m.p1.isPlayer || m.p2.isPlayer) && !m.winner); 
+ if (myMatch) { myMatch.winner = myMatch.p1.isPlayer ? myMatch.p1 : myMatch.p2; }
+ tournamentTree.round1.forEach(match => { if (match && !match.winner) match.winner = Math.random() > 0.5 ? match.p1 : match.p2; });
+ tournamentTree.semi = [
+ { p1: tournamentTree.round1[0].winner, p2: tournamentTree.round1[1].winner, winner: null },
+ { p1: tournamentTree.round1[2].winner, p2: tournamentTree.round1[3].winner, winner: null }
+ ];
+ currentStage = 'semi'; drawTournamentChart(); changeScreen('chart-screen');
+ } else if (currentStage === 'semi') {
+ let myMatch = tournamentTree.semi.find(m => m && ((m.p1 && m.p1.isPlayer) || (m.p2 && m.p2.isPlayer)) && !m.winner); 
+ if (myMatch) { myMatch.winner = (myMatch.p1 && myMatch.p1.isPlayer) ? myMatch.p1 : myMatch.p2; }
+ let cpuMatch = tournamentTree.semi.find(m => m && !((m.p1 && m.p1.isPlayer) || (m.p2 && m.p2.isPlayer))); 
+ if (cpuMatch) { cpuMatch.winner = Math.random() > 0.5 ? cpuMatch.p1 : cpuMatch.p2; }
+ tournamentTree.final = { p1: tournamentTree.semi[0].winner, p2: tournamentTree.semi[1].winner, winner: null };
+ currentStage = 'final'; drawTournamentChart(); changeScreen('chart-screen');
+ } else { 
+ let f = tournamentTree.final; f.winner = f.p1.isPlayer ? f.p1 : f.p2; drawTournamentChart();
+ updateBackgroundColor('champion'); changeScreen('champion-screen');
+ }
+ }
 
-    function resetGame() {
-        matchRound = 1;
-        updateBackgroundColor('normal');
-        changeScreen('start-screen');
-    }
-
-    if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
-        window.addEventListener('load', () => {
-            const swCode = `
-                self.addEventListener('install', (e) => e.waitUntil(caches.open('v1').then(c => c.addAll(['./']))));
-                self.addEventListener('fetch', (e) => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
-            `;
-            const blob = new Blob([swCode], { type: 'application/javascript' });
-            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(err => console.log(err));
-        });
-    }
+ function quitGame() { clearInterval(loopInterval); updateBackgroundColor('normal'); changeScreen('start-screen'); }
 </script>
 </body>
 </html>
