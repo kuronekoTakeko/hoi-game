@@ -18,28 +18,28 @@
       margin: 0;
       padding: 0;
     }
-    body {
-      height: 100vh !important;
-      height: 100dvh !important;
-      margin: 0 !important;
-      padding: 8px 10px !important;
-      box-sizing: border-box;
-      /* 修正：画像（url）が指定されていない時は、このネイビーグラデーション背景を!importantで最優先表示させます */
-      background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%) !important;
-      background-size: cover !important;
-      background-position: center !important;
-      background-repeat: no-repeat !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: center !important; 
-      /*justify-content: space-between !important;*/
-      align-items: center !important;
-      overflow: hidden !important;
-      position: fixed;
-      width: 100%;
-      z-index: 1;
-      transition: background-image 0.5s ease;
-    }
+body {
+ height: 100vh !important;
+ height: 100dvh !important;
+ margin: 0 !important;
+ padding: calc(env(safe-area-inset-top) + 5px) 10px calc(env(safe-area-inset-bottom) + 5px) 10px !important;
+ box-sizing: border-box;
+ /* 修正：背景画像の設定がJavaScriptから正しく上書き適用されるようベースを調整 */
+ background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%) !important;
+ background-size: cover !important;
+ background-position: center !important;
+ background-repeat: no-repeat !important;
+ display: flex !important;
+ flex-direction: column !important;
+ justify-content: flex-start !important; /* 上から順番にきれいに並べる */
+ align-items: center !important;
+ overflow: hidden !important;
+ position: fixed;
+ width: 100%;
+ z-index: 1;
+ transition: background-image 0.5s ease;
+}
+
     /* 修正：対戦前イントロ画面のテキスト視認性を極限まで強化 */
     .intro-title, 
     #tournament-stage-title {
@@ -339,29 +339,27 @@
  word-break: keep-all !important;
  overflow-wrap: anywhere !important;
  }
+/* 上部ステータスバー：枠線を明るく強調 */
+.status-bar { 
+ display: flex; 
+ justify-content: space-between; 
+ align-items: center; 
+ font-size: 0.95rem; /* 文字を少しだけスマートに */
+ height: 32px !important; /* 40pxから32pxへ縮小して画面上部に絶対固定 */
+ pointer-events: auto; 
+ white-space: nowrap; 
+ margin-bottom: 2px; 
+ width: 100%; 
+ max-width: 420px; 
+ background: linear-gradient(180deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.8) 100%);
+ padding: 0 15px; 
+ border-radius: 8px; 
+ border: 1px solid rgba(255,255,255,0.3);
+ box-shadow: 0 4px 12px rgba(0,0,0,0.5); 
+ color: #ffffff !important; 
+ flex-shrink: 0 !important; /* 絶対につぶれないように固定 */
+}
 
-    
-    /* 上部ステータスバー：枠線を明るく強調 */
-    .status-bar { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      font-size: 1.1rem; 
-      font-weight: bold; 
-      height: 40px; 
-      pointer-events: auto; 
-      white-space: nowrap; 
-      margin-bottom: 2px; 
-      width: 100%; 
-      max-width: 420px; 
-      background: linear-gradient(180deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.8) 100%);
-      padding: 0 15px; 
-      border-radius: 8px; 
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5); 
-      color: #ffffff !important; 
-    }
-    
     /* 棄権ボタン */
     .quit-btn { 
       background: linear-gradient(180deg, #475569 0%, #334155 100%); 
@@ -412,37 +410,52 @@
       min-height: 490px !important;
       max-height: 490px !important;*/
     }
+.stage-box { 
+ width: 100% !important; 
+ max-width: 420px !important; 
+ 
+ /* ★超重要：画面縦幅の「42%」を上限に自動縮小。これで下のボタン空間を強制確保 */
+ height: min(480px, 42vh) !important; 
+ min-height: 0 !important;
+ max-height: 480px !important;
+ 
+ flex-grow: 0 !important; 
+ flex-shrink: 1 !important;
+ 
+ display: flex !important; 
+ flex-direction: column !important; 
+ align-items: center !important; 
+ justify-content: space-around !important; 
+ 
+ margin: 4px auto !important; 
+ position: relative;
+ background: rgba(15, 23, 42, 0.55) !important; /* すりガラス調を維持 */
+ backdrop-filter: blur(8px); 
+ -webkit-backdrop-filter: blur(8px);
+ border-radius: 20px;
+ border: 2px solid rgba(255, 255, 255, 0.2);
+ padding: 8px 10px;
+ transition: border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+ box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
+}
 
-    /* 修正：窮屈さを完全に解消するため、縦幅をさらに一回り大きく（480px）広げて完全ロックします */
-    .stage-box { 
-      width: 100% !important; 
-      max-width: 420px !important; 
-      
-      /* 高さを430pxから480pxへ拡大して窮屈さを完全に一掃 */
-      height: min(480px, 52vh) !important; 
-      min-height: 0 !important;
-      max-height: 480px !important;
-      
-      /* 元の自動引き伸ばしを確実に無効化する設定を追加 */
-      flex-grow: 0 !important; 
-      flex-shrink: 1 !important;
-      
-      display: flex !important; 
-      flex-direction: column !important; 
-      align-items: center !important; 
-      justify-content: space-around !important; 
-      
-      margin: 2px auto !important; 
-      position: relative;
-      background: rgba(15, 23, 42, 0.55); 
-      backdrop-filter: blur(8px); 
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      padding: 10px 10px;
-      transition: border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
-      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
-    }
+/* じゃんけん・あっち向いての文字（テレビアニメ風フチ取り）もデバイス連動で縮小 */
+.voice-text {
+ font-size: min(8vw, 6vh, 2.5rem) !important; /* 画面の高さ（vh）に合わせて可変 */
+ font-weight: 900 !important;
+ color: #ffea00 !important; 
+ text-shadow: 
+ 3px 3px 0px #000, -3px -3px 0px #000, 
+ 3px -3px 0px #000, -3px 3px 0px #000,
+ 0px 3px 0px #000, 0px -3px 0px #000,
+ 3px 0px 0px #000, -3px 0px 0px #000,
+ 4px 4px 0px #fff, -4px -4px 0px #fff,
+ 4px -4px 0px #fff, -4px 4px 0px #fff,
+ 0px 8px 20px rgba(0,0,0,0.9) !important;
+ margin: 2px 0 !important;
+ display: inline-block;
+ white-space: nowrap; 
+}
 
     /* あなたの攻撃時は「鮮やかなブルーネオン」をオーバーレイ発光 */
     .stage-box.player-turn {
@@ -537,24 +550,7 @@
     .finger-img.dir-down {
       transform: rotate(90deg);
     }
-    
-    /* テレビアニメ風縁取り：多重のドロップシャドウで、どんな背景の上でもクッキリ見やすく太フチ強調 */
-    .voice-text {
-      font-size: min(9vw, 2.7rem) !important; 
-      font-weight: 900 !important;
-      color: #ffea00 !important; /* 際立つゲーミングイエロー */
-      text-shadow: 
-        3px 3px 0px #000, -3px -3px 0px #000, 
-        3px -3px 0px #000, -3px 3px 0px #000,
-        0px 3px 0px #000, 0px -3px 0px #000,
-        3px 0px 0px #000, -3px 0px 0px #000,
-        4px 4px 0px #fff, -4px -4px 0px #fff,
-        4px -4px 0px #fff, -4px 4px 0px #fff,
-        0px 8px 20px rgba(0,0,0,0.9) !important;
-      margin: 8px 0 !important;
-      display: inline-block;
-      white-space: nowrap; 
-    }
+
     /* 操作パネル周り */
     .janken-controls { display: flex; gap: 20px; }
     
@@ -563,10 +559,10 @@
       background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); 
       border: none; 
       border-radius: 50%; 
-      width: 80px !important; 
-      height: 80px !important; 
-      min-width: 80px !important;
-      min-height: 80px !important;
+      width: min(80px, 9vh) !important;
+      height: min(80px, 9vh) !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
       max-width: 80px !important;
       max-height: 80px !important;
       display: flex !important; 
@@ -594,14 +590,14 @@
     
     /* あっち向いてホイボタン：アクリル立体感を強化 */
     .hoi-btn { 
-      font-size: 2.2rem; 
+      font-size: min(2.2rem, 4vh) !important; 
       background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); 
       border: none; 
       border-radius: 16px; 
-      height: 56px !important; 
-      width: 68px !important;
-      min-height: 56px !important;
-      min-width: 68px !important;
+      height: min(56px, 6.5vh) !important; /* 固定サイズからvh基準の自動可変へ */
+      width: min(68px, 8vh) !important;
+      min-height: 0 !important;
+      min-width: 0 !important;
       max-height: 56px !important;
       max-width: 68px !important;
       display: flex !important; 
@@ -623,45 +619,32 @@
     .hoi-btn:nth-child(3) { grid-column: 3; grid-row: 2; }
     .hoi-btn:nth-child(4) { grid-column: 2; grid-row: 3; }
     /* 修正：高さの固定を解除し、中身が綺麗に収まる自然な縦幅に戻します */
-    .controls {
-      width: 100% !important;
-      display: flex !important; 
-      flex-direction: column !important; 
-      align-items: center !important; 
-      
-      /* 高さを自動に戻すことで、十字キーが窮屈に潰れたり、
-         ボタンが消えたときにゲージが上に引っ張られるバグを完全に防ぎます */
-      height: auto !important;
-      min-height: auto !important;
-      max-height: auto !important;
-      
-      justify-content: flex-start !important; 
-      gap: 8px !important; /* パーツ同士の縦の間隔を綺麗に保ちます */
-      
-      margin-top: -10px !important; /* お気に入りの引き締まった定位置 */
-      margin-bottom: auto !important; 
-      
-      flex-grow: 0 !important;
-      flex-shrink: 0 !important;
-      /* 棄権するボタン（高さ約40px）と絶対に被らないよう、手元ボタンの下側に固定の余白を強制確保 */
-      padding-bottom: calc(env(safe-area-inset-bottom) + 55px) !important;
-    }
+.controls {
+ width: 100% !important;
+ display: flex !important; 
+ flex-direction: column !important; 
+ align-items: center !important; 
+ height: auto !important;
+ min-height: auto !important;
+ max-height: auto !important;
+ justify-content: flex-start !important; 
+ gap: 4px !important; 
+ margin-top: -5px !important; 
+ margin-bottom: auto !important; 
+ flex-grow: 0 !important;
+ flex-shrink: 0 !important;
+ /* ★棄権ボタンと絶対に被らないよう、下部に十分なマージン(70px)をガチッと確保 */
+ padding-bottom: calc(env(safe-area-inset-bottom) + 70px) !important;
+}
 
-    /* ゲージの文字とバーの隙間バランス */
-    .single-gauge-wrap {
-      margin: 0px auto 14px auto !important; 
-    }
-
-    /* じゃんけんUI（3ボタン）の高さ同期用 */
-    #janken-ui {
-      gap: 20px;
-      /* 十字キーと全体の縦サイズを完全に合わせるため、高さを144pxにロックします */
-      height: 144px !important; 
-      align-items: flex-start !important; 
-      justify-content: center;
-      margin: 0px !important;
-    }
-    
+/* じゃんけんUI（3ボタン）も高さをコンパクトに */
+#janken-ui {
+ gap: 15px;
+ height: min(144px, 16vh) !important; /* 高さを縮小 */
+ align-items: center !important; 
+ justify-content: center;
+ margin: 0px !important;
+}
     /* あっち向いてホイUI（十字キー） */
     #hoi-ui {
       margin: 0px !important;
@@ -780,7 +763,10 @@
       border: 2px solid #f87171; 
       text-shadow: 0 0 8px #f87171; 
     }
-    
+        /* ゲージの文字とバーの隙間バランス */
+    .single-gauge-wrap {
+      margin: 0px auto 14px auto !important; 
+    }
     .result-title { font-size: min(9vw, 4.5vh, 40px); font-weight: bold; pointer-events: auto; white-space: nowrap; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
     .win { color: #4ade80; text-shadow: 0 0 10px rgba(74,222,128,0.5); }
     .lose { color: #f87171; text-shadow: 0 0 10px rgba(248,113,113,0.5); }
