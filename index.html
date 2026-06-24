@@ -415,26 +415,26 @@ body {
  max-width: 420px !important; 
  
  /* ★超重要：画面縦幅の「42%」を上限に自動縮小。これで下のボタン空間を強制確保 */
- height: min(480px, 48vh) !important; 
+ height: min(480px, 46vh) !important; 
  min-height: 0 !important;
  max-height: 480px !important;
  
  flex-grow: 0 !important; 
- flex-shrink: 1 !important;
+ flex-shrink: 0 !important;
  
  display: flex !important; 
  flex-direction: column !important; 
  align-items: center !important; 
- justify-content: space-around !important; 
+ justify-content: space-between !important; 
  
- margin:2px auto 4px auto !important; 
+ margin:8px auto 8px auto !important; 
  position: relative;
  background: rgba(15, 23, 42, 0.55) !important; /* すりガラス調を維持 */
  backdrop-filter: blur(8px); 
  -webkit-backdrop-filter: blur(8px);
  border-radius: 20px;
  border: 2px solid rgba(255, 255, 255, 0.2);
- padding: 8px 10px;
+ padding: 12px 10px;
  transition: border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
 }
@@ -473,14 +473,15 @@ body {
     /* キャラクター画像表示エリア（アイコンサイズを最大170pxへ拡大！） */
     .enemy-image-area { 
       width: 100%; 
-      max-width: min(170px, 20vh); /* 画面が狭いときは最大縦幅の20%に自動縮小 */
-      height: min(170px, 20vh);  /* 130pxから170pxへ大幅拡大 */
+      max-width: min(170px, 15vh); /* 画面が狭いときは最大縦幅の20%に自動縮小 */
+      height: min(170px, 15vh);  /* 130pxから170pxへ大幅拡大 */
       display: flex; 
       align-items: center; 
       justify-content: center; 
       z-index: 1; 
       filter: drop-shadow(0 4px 8px rgba(0,0,0,0.7)) drop-shadow(0 0 12px rgba(255,255,255,0.75)) !important; 
       transition: width 0.3s, height 0.3s;
+      flex-shrink: 0 !important; /* 縦潰れを防止 */
     }
 
     .enemy-image-area img { 
@@ -631,12 +632,12 @@ body {
  max-height: auto !important;
  justify-content: flex-start !important; 
  gap: 4px !important; 
- margin-top: -5px !important; 
- margin-bottom: auto !important; 
- flex-grow: 0 !important;
+ margin-top: 2px !important; 
+ margin-bottom: 0 !important; 
+ flex-grow: 1 !important;
  flex-shrink: 0 !important;
  /* ★棄権ボタンと絶対に被らないよう、下部に十分なマージン(70px)をガチッと確保 */
- padding-bottom: calc(env(safe-area-inset-bottom) + 70px) !important;
+ padding-bottom: calc(env(safe-area-inset-bottom) + 65px) !important;
 }
 
 /* じゃんけんUI（3ボタン）も高さをコンパクトに */
