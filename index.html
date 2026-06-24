@@ -415,7 +415,7 @@ body {
  max-width: 420px !important; 
  
  /* ★超重要：画面縦幅の「42%」を上限に自動縮小。これで下のボタン空間を強制確保 */
- height: min(480px, 42vh) !important; 
+ height: min(480px, 48vh) !important; 
  min-height: 0 !important;
  max-height: 480px !important;
  
@@ -427,7 +427,7 @@ body {
  align-items: center !important; 
  justify-content: space-around !important; 
  
- margin: 4px auto !important; 
+ margin:2px auto 4px auto !important; 
  position: relative;
  background: rgba(15, 23, 42, 0.55) !important; /* すりガラス調を維持 */
  backdrop-filter: blur(8px); 
@@ -504,8 +504,9 @@ body {
     /* 中央の白い円盤：見やすさを考慮し、枠線の輝度をアップ */
     .enemy-hand { 
       font-size: 3.5rem; 
-      height: min(85px, 10vh) !important; /* 縦幅の10%を上限に自動縮小 */
-      width: min(85px, 10vh) !important; 
+      height: min(85px, 11vh) !important; /* 縦幅の10%を上限に自動縮小 */
+      width: min(85px, 11vh) !important;
+      aspect-ratio: 1 / 1 !important;  
       min-height: 0px !important;
       min-width: 0px !important;
       max-height: 85px !important;
@@ -520,6 +521,7 @@ body {
       box-shadow: 0 6px 0 #cbd5e1, 0 8px 20px rgba(0,0,0,0.5), inset 0 -4px 0 #e2e8f0; 
       overflow: hidden;
       border: 1px solid #ffffff;
+      flex-shrink: 0 !important; /* 絶対に潰れさせないための固定設定 */
     }
 
     /* 円盤の中やボタンの中に入る「じゃんけん・指画像」の標準スタイル */
