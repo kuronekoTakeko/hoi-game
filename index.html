@@ -22,7 +22,7 @@
       height: 100vh !important;
       height: 100dvh !important;
       margin: 0 !important;
-      padding: 15px 10px !important;
+      padding: 8px 10px !important;
       box-sizing: border-box;
       /* 修正：画像（url）が指定されていない時は、このネイビーグラデーション背景を!importantで最優先表示させます */
       background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%) !important;
@@ -31,7 +31,8 @@
       background-repeat: no-repeat !important;
       display: flex !important;
       flex-direction: column !important;
-      justify-content: space-between !important;
+      justify-content: center !important; 
+      /*justify-content: space-between !important;*/
       align-items: center !important;
       overflow: hidden !important;
       position: fixed;
@@ -403,13 +404,13 @@
       pointer-events: auto !important; 
       
       /* 競合を絶対解決：隙間を勝手に埋めて伸び縮みさせる原因だった命令を【完全に無効化（0）】にします */
-      flex-grow: 0 !important; 
-      flex-shrink: 0 !important;
-      
+      flex-grow: 1 !important; 
+      flex-shrink: 1 !important;
+      align-items: center !important;
       /* 上のパネル（480px）にぴったりフィットする高さを明示してガチッとロックします */
-      height: 490px !important;
+      /*height: 490px !important;
       min-height: 490px !important;
-      max-height: 490px !important;
+      max-height: 490px !important;*/
     }
 
     /* 修正：窮屈さを完全に解消するため、縦幅をさらに一回り大きく（480px）広げて完全ロックします */
@@ -418,27 +419,27 @@
       max-width: 420px !important; 
       
       /* 高さを430pxから480pxへ拡大して窮屈さを完全に一掃 */
-      height: 480px !important; 
-      min-height: 480px !important;
+      height: min(480px, 52vh) !important; 
+      min-height: 0 !important;
       max-height: 480px !important;
       
       /* 元の自動引き伸ばしを確実に無効化する設定を追加 */
       flex-grow: 0 !important; 
-      flex-shrink: 0 !important;
+      flex-shrink: 1 !important;
       
       display: flex !important; 
       flex-direction: column !important; 
       align-items: center !important; 
       justify-content: space-around !important; 
       
-      margin: 5px auto !important; 
+      margin: 2px auto !important; 
       position: relative;
       background: rgba(15, 23, 42, 0.55); 
       backdrop-filter: blur(8px); 
       -webkit-backdrop-filter: blur(8px);
       border-radius: 20px;
       border: 2px solid rgba(255, 255, 255, 0.2);
-      padding: 15px 10px;
+      padding: 10px 10px;
       transition: border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
       box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
     }
@@ -459,8 +460,8 @@
     /* キャラクター画像表示エリア（アイコンサイズを最大170pxへ拡大！） */
     .enemy-image-area { 
       width: 100%; 
-      max-width: 170px; /* 130pxから170pxへ大幅拡大 */
-      height: 170px; /* 130pxから170pxへ大幅拡大 */
+      max-width: min(170px, 20vh); /* 画面が狭いときは最大縦幅の20%に自動縮小 */
+      height: min(170px, 20vh);  /* 130pxから170pxへ大幅拡大 */
       display: flex; 
       align-items: center; 
       justify-content: center; 
@@ -490,10 +491,10 @@
     /* 中央の白い円盤：見やすさを考慮し、枠線の輝度をアップ */
     .enemy-hand { 
       font-size: 3.5rem; 
-      height: 85px !important; 
-      width: 85px !important; 
-      min-height: 85px !important;
-      min-width: 85px !important;
+      height: min(85px, 10vh) !important; /* 縦幅の10%を上限に自動縮小 */
+      width: min(85px, 10vh) !important; 
+      min-height: 0px !important;
+      min-width: 0px !important;
       max-height: 85px !important;
       max-width: 85px !important;
       display: flex !important; 
@@ -502,7 +503,7 @@
       background: #ffffff; 
       border-radius: 50%; 
       z-index: 1; 
-      margin-top: 5px; 
+      margin-top: 2px; 
       box-shadow: 0 6px 0 #cbd5e1, 0 8px 20px rgba(0,0,0,0.5), inset 0 -4px 0 #e2e8f0; 
       overflow: hidden;
       border: 1px solid #ffffff;
@@ -635,14 +636,15 @@
       max-height: auto !important;
       
       justify-content: flex-start !important; 
-      gap: 14px !important; /* パーツ同士の縦の間隔を綺麗に保ちます */
+      gap: 8px !important; /* パーツ同士の縦の間隔を綺麗に保ちます */
       
-      margin-top: -15px !important; /* お気に入りの引き締まった定位置 */
+      margin-top: -10px !important; /* お気に入りの引き締まった定位置 */
       margin-bottom: auto !important; 
       
       flex-grow: 0 !important;
       flex-shrink: 0 !important;
-      padding-bottom: env(safe-area-inset-bottom);
+      /* 棄権するボタン（高さ約40px）と絶対に被らないよう、手元ボタンの下側に固定の余白を強制確保 */
+      padding-bottom: calc(env(safe-area-inset-bottom) + 55px) !important;
     }
 
     /* ゲージの文字とバーの隙間バランス */
@@ -1372,7 +1374,7 @@
     
     html += '<div class="tournament-round">';
     for(let k=0; k<3; k++) { html += '<div class="match-slot" style="visibility: hidden;"></div>'; }
-    html += `<div class="match-slot" style="--line-display: none; width: 25%;"><div class="${winnerClass}" style="border-width:2px; background: linear-gradient(180deg, #fffde7 0%, #fff9c4 100%); color: #b78103; box-shadow: 0 0 10px rgba(251,191,36,0.5); width: 100%;">✨ ${finalWinnerName} ✨</div></div>`; 
+    html += `<div class="match-slot" style="--line-display: none; width: 25%;"><div class="${winnerClass}" style="border-width:2px; background: linear-gradient(180deg, #fffde7 0%, #fff9c4 100%); color: #b78103; box-shadow: 0 0 10px rgba(251,191,36,0.5); width: 100%;">✨${finalWinnerName}✨</div></div>`; 
     for(let k=0; k<3; k++) { html += '<div class="match-slot" style="visibility: hidden;"></div>'; }
     html += '</div>';
 
