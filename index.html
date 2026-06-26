@@ -12,7 +12,6 @@
  padding: 0; 
  font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif; 
  }
- 
  html {
  height: 100%;
  margin: 0;
@@ -107,7 +106,7 @@ body {
  }
  /* アクリル風・立体ゲーミングトイ風の共通ボタンデザイン */
  button { 
- background: linear-gradient(180deg, #4a90e2 0%, #357abd 100%); 
+ background: linear-gradient(180deg, #4a90e2 0%, #357abd 100%);
  color: white; 
  border: none; 
  padding: 16px 32px; 
@@ -154,29 +153,24 @@ body {
  margin-bottom: 5px; 
  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
  }
- 
  .mode-btn { 
- background: linear-gradient(180deg, #757575 0%, #424242 100%); 
+ background: linear-gradient(180deg, #757575 0%, #424242 100%);
  box-shadow: 0 6px 0 #212121, 0 8px 15px rgba(0,0,0,0.4);
  width: 90%; 
  max-width: 320px; 
  }
- 
  .mode-btn:active {
  transform: translateY(4px);
  box-shadow: 0 2px 0 #212121, 0 4px 6px rgba(0,0,0,0.4);
  }
- 
  .mode-btn.selected { 
- background: linear-gradient(180deg, #66bb6a 0%, #388e3c 100%); 
+ background: linear-gradient(180deg, #66bb6a 0%, #388e3c 100%);
  box-shadow: 0 6px 0 #1b5e20, 0 8px 15px rgba(0,0,0,0.4);
  }
- 
  .mode-btn.selected:active {
  transform: translateY(4px);
  box-shadow: 0 2px 0 #1b5e20, 0 4px 6px rgba(0,0,0,0.4);
  }
- 
  .join-btn-container { 
  width: 100%; 
  display: flex; 
@@ -185,15 +179,13 @@ body {
  pointer-events: auto; 
  z-index: 10; 
  }
- 
  .main-join-btn { 
- background: linear-gradient(180deg, #ffa726 0%, #f57c00 100%); 
+ background: linear-gradient(180deg, #ffa726 0%, #f57c00 100%);
  width: 95%; 
  max-width: 360px; 
  font-size: 1.4rem; 
  box-shadow: 0 6px 0 #b35c00, 0 8px 20px rgba(245,124,0,0.4); 
  }
- 
  .main-join-btn:active {
  transform: translateY(4px);
  box-shadow: 0 2px 0 #b35c00, 0 4px 6px rgba(245,124,0,0.4);
@@ -224,15 +216,13 @@ body {
  overflow: hidden; 
  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
  }
- 
  .tournament-container { 
  display: flex; 
- flex-direction: column-reverse; 
+  flex-direction: column-reverse; 
  justify-content: space-between; 
  width: 100%; 
  height: 100%; 
  }
- 
  .tournament-round { 
  display: flex; 
  flex-direction: row; 
@@ -240,7 +230,6 @@ body {
  width: 100%; 
  position: relative; 
  }
- 
  .match-slot { 
  display: flex; 
  flex-direction: column; 
@@ -249,7 +238,6 @@ body {
  width: 12.5%; 
  position: relative; 
  }
- 
  .player-node { 
  background: #1e293b; 
  border: 1px solid #475569; 
@@ -270,11 +258,9 @@ body {
  justify-content: center; 
  margin: 0 auto; 
  }
- 
  .match-slot.my-match .player-node { border-color: #4ade80; }
  .player-node.is-me { background: #0f172a; color: #38bdf8; border-color: #38bdf8; box-shadow: 0 0 8px rgba(56,189,248,0.4); }
  .player-node.is-winner { border-color: #fbbf24; background: #2d2206; color: #fbbf24; box-shadow: 0 0 8px rgba(251,191,36,0.4); }
- 
  .tournament-round .match-slot::after { 
  content: ""; 
  position: absolute; 
@@ -286,7 +272,6 @@ body {
  z-index: 1; 
  display: var(--line-display, block); 
  }
- 
  #chart-start-btn { 
  white-space: nowrap; 
  font-size: min(4.5vw, 2.1vh, 22px); 
@@ -315,7 +300,6 @@ body {
  pointer-events: auto; 
  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
  backdrop-filter: blur(4px);
- /* 修正：単語の途中で不自然に文字が千切れるのを防ぎ綺麗に折り返します */
  word-break: keep-all !important;
  overflow-wrap: anywhere !important;
  }
@@ -325,7 +309,7 @@ body {
  justify-content: space-between; 
  align-items: center; 
  font-size: 0.95rem; 
- height: 32px !important; /* 40pxから32pxへ縮小して画面上部に絶対固定 */
+ height: 32px !important; 
  pointer-events: auto; 
  white-space: nowrap; 
  margin-bottom: 2px; 
@@ -339,9 +323,8 @@ body {
  color: #ffffff !important; 
  flex-shrink: 0 !important; 
 }
- /* 棄権ボタン */
  .quit-btn { 
- background: linear-gradient(180deg, #475569 0%, #334155 100%); 
+ background: linear-gradient(180deg, #475569 0%, #334155 100%);
  color: #ffffff; 
  padding: 10px 24px; 
  font-size: 0.9rem; 
@@ -355,13 +338,10 @@ body {
  margin-top: 15px !important; 
  transition: all 0.1s; 
  }
- 
  .quit-btn:active { 
  transform: translateY(2px); 
  box-shadow: 0 2px 0 #1e293b, 0 3px 5px rgba(0,0,0,0.5); 
  }
- 
- /* スコアバー */
  .score-bar { 
  font-size: 1.1rem; 
  font-weight: bold; 
@@ -372,7 +352,6 @@ body {
  color: #ffffff !important; 
  text-shadow: 0 2px 6px rgba(0,0,0,0.9), 0 0 10px rgba(255,255,255,0.3); 
  }
- /* 修正：じゃんけん時もホイ時も全く同じベストな縦幅に固定します */
  .character-zone { 
  width: 100% !important; 
  display: flex !important; 
@@ -385,7 +364,6 @@ body {
 .stage-box { 
  width: 100% !important; 
  max-width: 400px !important; 
- /* ★スマホ画面（縦幅の43%）に完璧にフィットさせはみ出しをゼロにします */
  height: min(460px, 43vh) !important; 
  min-height: 0 !important;
  max-height: 460px !important;
@@ -422,13 +400,11 @@ body {
  white-space: nowrap; 
  flex-shrink: 0 !important;
 }
- /* あなたの攻撃時は「鮮やかなブルーネオン」をオーバーレイ発光 */
  .stage-box.player-turn {
  background-color: rgba(14, 165, 233, 0.25);
  border-color: #38bdf8;
  box-shadow: 0 0 30px rgba(56, 189, 248, 0.8), inset 0 0 20px rgba(56, 189, 248, 0.4);
  }
- /* 敵の攻撃時は「鮮やかなレッドネオン」をオーバーレイ発光 */
  .stage-box.enemy-turn {
  background-color: rgba(239, 68, 68, 0.25);
  border-color: #f87171;
@@ -496,9 +472,8 @@ body {
  .finger-img.dir-up { transform: rotate(-90deg); }
  .finger-img.dir-down { transform: rotate(90deg); }
  .janken-controls { display: flex; gap: 20px; }
- 
  .janken-btn { 
- background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); 
+ background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
  border: none; 
  border-radius: 50%; 
  width: min(80px, 9vh) !important;
@@ -525,10 +500,9 @@ body {
  background: transparent !important;
  }
  .hoi-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 230px; }
- 
  .hoi-btn { 
  font-size: min(2.2rem, 4vh) !important; 
- background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); 
+ background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
  border: none; 
  border-radius: 16px; 
  height: min(56px, 6.5vh) !important; 
@@ -699,14 +673,13 @@ body {
  <button class="main-join-btn" onclick="startTournament()">トーナメントに参戦！</button>
  </div>
  </div>
- 
  <!-- 2. トーナメント表画面 -->
  <div id="chart-screen" class="screen">
  <h2 style="font-size: 1.4rem; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">トーナメント表 🏆</h2>
  <div class="chart-box" id="chart-box-container"></div>
  <button id="chart-start-btn" onclick="proceedToIntro()">試合にすすむ！</button>
  </div>
- <!-- 3. 对戦前イントロ画面 -->
+ <!-- 3. 対戦前イントロ画面 -->
  <div id="intro-screen" class="screen">
  <div class="intro-title" id="tournament-stage-title" style="font-size: 1.8rem; font-weight: bold; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">1回戦</div>
  <h2 id="intro-matchup" style="font-size: 1.2rem; color: #cbd5e1; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">プレイヤー VS ？？？</h2>
@@ -714,8 +687,7 @@ body {
  <div class="dialogue-box" id="intro-dialogue">...</div>
  <button style="background: linear-gradient(180deg, #ffa726 0%, #f57c00 100%); box-shadow: 0 6px 0 #b35c00, 0 8px 15px rgba(0,0,0,0.4);" onclick="startBattle()">バトルスタート！</button>
  </div>
- 
- <!-- 4. バトルメイン画面（不要テキストを完全排除した最新構造） -->
+ <!-- 4. バトルメイン画面 -->
  <div id="game-screen" class="screen" style="background: transparent !important;">
  <div class="status-bar">
  <span id="match-count">1回戦</span>
@@ -723,47 +695,38 @@ body {
  <span id="enemy-name">あいて：ーー</span>
  </div>
  <div class="score-bar" id="score-display">★ 0 - 0 ★</div>
- 
  <div class="character-zone">
  <div id="battle-stage-box" class="stage-box">
- <div id="ultra-alert-text" class="ultra-text"> 五芒星の絶対神指 ⭐ ！ ⭐</div>
+ <div id="ultra-alert-text" class="ultra-text">五芒星の絶対神指！ ⭐⭐</div>
  <div class="enemy-image-area"><img id="enemy-avatar-display-img" src="image/front.png" alt="あいて"></div>
- 
- <!-- 【相手のゲージ】相手の顔イラストのすぐ下に配置 -->
+ <!-- 【相手のゲージ】 -->
  <div class="single-gauge-wrap">
  <div class="gauge-label-text">あいての五芒星ゲージ</div>
  <div class="gauge-box-ui">
  <div id="enemy-gauge-bar" class="gauge-bar-ui enemy"></div>
  </div>
  </div>
- 
- <!-- 現在の攻守がひと目でわかるネオン風バナー -->
  <div id="turn-banner-display" class="turn-indicator-banner">YOUR ATTACK</div>
  <div class="voice-text" id="voice-display">じゃーんけーん…</div>
- 
- <!-- 相手の手（中央円盤） -->
  <div class="enemy-hand" id="enemy-hand-display">
  <img id="enemy-hand-img" src="image/gu.png" alt="あいての手">
  </div>
  </div>
  </div>
  <div class="controls">
- <!-- 【自分のゲージ】操作パネル（自分の手）のすぐ上に配置 -->
  <div class="single-gauge-wrap">
  <div class="gauge-label-text">あなたの五芒星ゲージ</div>
  <div class="gauge-box-ui">
  <div id="player-gauge-bar" class="gauge-bar-ui player"></div>
  </div>
  </div>
- 
  <!-- じゃんけんUI -->
  <div id="janken-ui" class="janken-controls">
  <button class="janken-btn" onclick="playJanken('✊')"><img src="image/gu.png" alt="グー"></button>
  <button class="janken-btn" onclick="playJanken('✌')"><img src="image/cho.png" alt="チョキ"></button>
  <button class="janken-btn" onclick="playJanken('🖐')"><img src="image/pa.png" alt="パー"></button>
  </div>
-
- <!-- あっちむいてホイUI（攻守で中身を完全入れ替えする最新ハイブリッド構造） -->
+ <!-- あっちむいてホイUI -->
  <div id="hoi-ui" class="hoi-controls" style="display: none;">
  <button class="hoi-btn" style="color: #111111 !important; font-size: 2.2rem !important; font-weight: 900 !important;" onclick="playHoi('上')"><span class="hoi-btn-content">▲</span></button>
  <button class="hoi-btn" style="color: #111111 !important; font-size: 2.2rem !important; font-weight: 900 !important;" onclick="playHoi('左')"><span class="hoi-btn-content">◀</span></button>
@@ -773,166 +736,237 @@ body {
  <button class="quit-btn" onclick="quitGame()">棄権する</button>
  </div>
  </div>
-
  <!-- 5. 通常の結果画面 -->
  <div id="result-screen" class="screen">
  <div id="result-text" class="result-title"></div>
  <div class="dialogue-box" id="result-dialogue">...</div>
  <button id="result-next-btn" style="background: linear-gradient(180deg, #66bb6a 0%, #388e3c 100%); box-shadow: 0 6px 0 #1b5e20, 0 8px 15px rgba(0,0,0,0.4);" onclick="nextStep()">次へすすむ</button>
  </div>
-
  <!-- 6. 完全優勝おめでとう画面 -->
  <div id="champion-screen" class="screen">
- <div class="champion-title"> 完全優勝!! </div> 🏆🏆
- <div class="trophy-box"> 🥇 </div>
+ <div class="champion-title">完全優勝!! 🏆🏆</div>
+ <div class="trophy-box">🥇</div>
  <div class="dialogue-box" style="background: rgba(15, 23, 42, 0.7); border: 2px solid #fbbf24; box-shadow: 0 0 15px rgba(251,191,36,0.3);">
  <p class="champion-msg">すべての強敵を打ち破り、あっちむいてホイ界の頂点に立ちました！偉大なチャンピオンに拍手！</p>
  </div>
  <button style="background: linear-gradient(180deg, #ffa726 0%, #f57c00 100%); box-shadow: 0 6px 0 #b35c00, 0 8px 15px rgba(0,0,0,0.4); margin-top: 15px;" onclick="quitGame()">タイトルへ戻る</button>
  </div>
 </div>
+
 <script>
- // グローバルアセット定義
- const hands = ['✊', '✌', '🖐'];
- const dirKeys = ['上', '下', '左', '右'];
- 
- // じゃんけん画像と指画像のパス設定
- const handImages = { '✊': 'image/gu.png', '✌': 'image/cho.png', '🖐': 'image/pa.png' };
- const fingerImageSrc = 'image/hand.png'; // あっち向いてホイの共通指画像
+// --- PWA対応：遅延ゼロの超強力オーディオシステム（Web Audio API駆動） ---
+class WebAudioManager {
+ constructor() {
+ this.ctx = null;
+ this.buffers = {};
+ this.bgmNode = null;
+ this.bgmGain = null;
+ this.currentBgmKey = null;
+ }
+ init() {
+ if (this.ctx) return;
+ this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+ this.bgmGain = this.ctx.createGain();
+ this.bgmGain.connect(this.ctx.destination);
+ }
+ async preload(key, url) {
+ try {
+ const response = await fetch(url);
+ const arrayBuffer = await response.arrayBuffer();
+ this.buffers[key] = await new Promise((resolve, reject) => {
+ this.ctx.decodeAudioData(arrayBuffer, resolve, reject);
+ });
+ } catch (e) {
+ console.error(`オーディオ読込失敗: ${key}`, e);
+ }
+ }
+ playSE(key) {
+ if (!this.ctx || !this.buffers[key]) return;
+ this.resumeContext();
+ const source = this.ctx.createBufferSource();
+ source.buffer = this.buffers[key];
+ source.connect(this.ctx.destination);
+ source.start(0);
+ }
+ playBGM(key, volume = 0.25) {
+ if (!this.ctx || !this.buffers[key] || this.currentBgmKey === key) return;
+ this.resumeContext();
+ this.stopBgm();
+ this.currentBgmKey = key;
+ this.bgmNode = this.ctx.createBufferSource();
+ this.bgmNode.buffer = this.buffers[key];
+ this.bgmNode.loop = true;
+ this.bgmGain.gain.setValueAtTime(volume, this.ctx.currentTime);
+ this.bgmNode.connect(this.bgmGain);
+ this.bgmNode.start(0);
+ }
+ stopBgm() {
+ if (this.bgmNode) {
+ try { this.bgmNode.stop(); } catch(e) {}
+ this.bgmNode = null;
+ }
+ this.currentBgmKey = null;
+ }
+ resumeContext() {
+ if (this.ctx && this.ctx.state === 'suspended') {
+ this.ctx.resume();
+ }
+ }
+}
+const audio = new WebAudioManager();
+// グローバルアセット定義
+const hands = ['✊', '✌', '🖐'];
+const dirKeys = ['上', '下', '左', '右'];
+// じゃんけん画像と指画像のパス設定
+const handImages = { '✊': 'image/gu.png', '✌': 'image/cho.png', '🖐': 'image/pa.png' };
+const fingerImageSrc = 'image/hand.png'; // あっち向いてホイの共通指画像
+// 基本的な顔画像のデフォルト
+const enemyImages = { '正面': 'image/front.png', '上': 'image/up.png', '下': 'image/down.png', '左': 'image/left.png', '右': 'image/right.png' }; 
 
- // 基本的な顔画像のデフォルト
- const enemyImages = { '正面': 'image/front.png', '上': 'image/up.png', '下': 'image/down.png', '左': 'image/left.png', '右': 'image/right.png' }; 
-
- // --- 🎮 キャラクター専用データベース（GitHub Pages完全同期版） ---
- // すべての半角スペースを排除し、テレコ仕様などのこだわりマッピングを完全復元しました
- const internalEnemies = [
+// --- キャラクター専用データベース（GitHub Pages完全同期版） --- 🎮
+const internalEnemies = [
  { 
  name: "ノビオ", position: "ライバル", intro: "ずっと練習してたんだ！負けないぞー！", win: "ボクの勝ち！", lose: "うわ〜ん！敗けた！", 
- bg: "image/nobio_bg.png",
+ bg: "image/nobio_bg.png", bgmKey: "bgm_nobio",
  favAttackDirs: ['下','下','下','上','左','右'], favDefendDirs: ['上','上','上','下','左','右'],
  images: { '正面': 'image/nobio_front.png', '上': 'image/nobio_up.png', '下': 'image/nobio_down.png', '左': 'image/nobio_left.png', '右': 'image/nobio_right.png' }
  },
  { 
  name: "お嬢様", position: "ライバル", intro: "オーッホッホ！わたくしの敵ではありませんわ！", win: "当然の結果ですわ。", lose: "敗北するなんて…おのれ！", 
- bg: "image/princess_bg.png",
+ bg: "image/princess_bg.png", bgmKey: "bgm_princess",
  favAttackDirs: ['上','上','上','下','左','右'], favDefendDirs: ['右','右','右','上','下','左'],
  images: { '正面': 'image/princess_front.png', '上': 'image/princess_up.png', '下': 'image/princess_down.png', '左': 'image/princess_left.png', '右': 'image/princess_right.png' }
  },
  { 
  name: "熱血ハヤト", position: "ライバル", intro: "俺のパッションは誰にも止められねえ！", win: "うおっしゃあ！勝ちだ！", lose: "クソッ、燃え尽きたぜ…", 
- bg: "image/protagonist_bg.png",
- favAttackDirs: ['右','右','右','上','下','左'], favDefendDirs: ['左','left','左','上','下','右'],
+ bg: "image/protagonist_bg.png", bgmKey: "bgm_protagonist",
+ favAttackDirs: ['右','右','右','上','下','左'], favDefendDirs: ['左','左','左','上','下','右'],
  images: { '正面': 'image/protagonist_front.png', '上': 'image/protagonist_up.png', '下': 'image/protagonist_down.png', '左': 'image/protagonist_left.png', 'left': 'image/protagonist_left.png', '右': 'image/protagonist_right.png' }
  },
  { 
  name: "忍者コタロウ", position: "ライバル", intro: "拙者の高速の術、見切れるでござるか？", win: "忍法あっちむいての術！", lose: "完全に見破られるとは…", 
- bg: "image/ninja_boy_bg.png",
+ bg: "image/ninja_boy_bg.png", bgmKey: "bgm_ninja",
  favAttackDirs: ['左','右','左','右','上','下'], favDefendDirs: ['上','下','上','下','左','右'],
  images: { '正面': 'image/ninja_boy_front.png', '上': 'image/ninja_boy_up.png', '下': 'image/ninja_boy_down.png', '左': 'image/ninja_boy_left.png', '右': 'image/ninja_boy_right.png' }
  },
  { 
  name: "マッド科学者", position: "ライバル", intro: "君の癖はすべて計算通りなのだよ！", win: "計算通りの勝利！", lose: "計算を上回る超直感だと！？", 
- bg: "image/mad_scientist_bg.png",
+ bg: "image/mad_scientist_bg.png", bgmKey: "bgm_scientist",
  favAttackDirs: ['上','下','上','下','左','右'], favDefendDirs: ['左','右','左','右','上','下'],
- /* 【超重要・テレコ完全復元】「scientist_down.png」の時に顔が「上」を向いているという
- イラスト素材の実際の見た目の向きにプログラムのキーを完全に一致させました */
+ /* 【超重要・テレコ完全復元】「scientist_down.png」の時に顔が「上」を向いているというイラスト素材の実際の見た目の向きにプログラムのキーを完全に一致させました */
  images: { '正面': 'image/mad_scientist_front.png', '上': 'image/mad_scientist_up.png', '下': 'image/mad_scientist_down.png', '左': 'image/mad_scientist_left.png', '右': 'image/mad_scientist_right.png' }
  },
  { 
- name: "ゲーマー レイ", position: "ライバル", intro: "フレーム単位で君の手は見えているよ。", win: "完全な実力さ。", lose: "君、すごい反射神経だね。", 
- bg: "image/gamer_bg.png",
- favAttackDirs: ['上','右','上','右','下','左'], favDefendDirs: ['下','左','下','左','上','right'],
- images: { '正面': 'image/gamer_front.png', '上': 'image/gamer_up.png', '下': 'image/gamer_down.png', '左': 'image/gamer_left.png', 'right': 'image/gamer_right.png' }
+ name: "ゲーマー レイ", position: "ライバル", intro: "フレーム単位で君の手は見えているよ。", win: "完全な実力さ。", lose: "君、すごい反射神経だね。",
+ bg: "image/gamer_bg.png", bgmKey: "bgm_gamer",
+ favAttackDirs: ['上','右','上','右','下','左'], favDefendDirs: ['下','左','下','左','上','右'],
+ images: { '正面': 'image/gamer_front.png', '上': 'image/gamer_up.png', '下': 'image/gamer_down.png', '左': 'image/gamer_left.png', '右': 'image/gamer_right.png' }
  },
  { 
  name: "魔王ダーク", position: "ライバル", intro: "この最強の恐怖に、君は耐えられるか？", win: "絶望するが良い！", lose: "我が魔王の座が崩れ去るとは…", 
- bg: "image/demon_king_bg.png",
+ bg: "image/demon_king_bg.png", bgmKey: "bgm_demon",
  favAttackDirs: ['上','左','右','下'], favDefendDirs: ['上','左','右','下'],
- images: { '正面': 'image/demon_king_front.png', '上': 'image/demon_king_up.png', '下': 'image/demon_king_down.png', 'safe_down': 'image/demon_king_down.png', '左': 'image/demon_king_left.png', '右': 'image/demon_king_right.png' }
+ images: { '正面': 'image/demon_king_front.png', '上': 'image/demon_king_up.png', '下': 'image/demon_king_down.png', '左': 'image/demon_king_left.png', '右': 'image/demon_king_right.png' }
  }
- ];
+];
 
- // ゲーム状態管理変数
- let gameMode = '1shot', currentStage = 'round1', currentEnemy = null, poolEnemies = [], playerScore = 0, enemyScore = 0, maxWinsNeeded = 1, enemySpeed = 300, loopInterval = null, jankenResult = "", currentHandIndex = 0, isDrawRound = false, playerIndexInTournament = 0;
- let tournamentTree = { round1: [null, null, null, null], semi: [null, null], final: { p1: null, p2: null, winner: null } };
- let playerJankenWins = 0; let enemyJankenWins = 0;
+// ゲーム状態管理変数
+let gameMode = '1shot', currentStage = 'round1', currentEnemy = null, poolEnemies = [], playerScore = 0, enemyScore = 0, maxWinsNeeded = 1, enemySpeed = 300, loopInterval = null, jankenResult = "", currentHandIndex = 0, isDrawRound = false, playerIndexInTournament = 0;
+let tournamentTree = { round1: [null, null, null, null], semi: [null, null], final: { p1: null, p2: null, winner: null } };
+let playerJankenWins = 0; let enemyJankenWins = 0;
+let lastPlayerJankenHand = ""; let lastPlayerHoiDir = "";
 
- // 🧠 極限強化AI用：プレイヤーの過去の手を記憶する学習バッファ
- let lastPlayerJankenHand = "";
- let lastPlayerHoiDir = "";
-
- // 🚀 【実機ラグ完全抹消システム】起動時に全アセットをブラウザに強制フルロード
- const assetCache = [];
- function preloadAllAssets() {
+// 【実機ラグ完全抹消システム】起動時に全アセットをブラウザに強制フルロード🚀
+const assetCache = [];
+async function preloadAllAssets() {
+ // 1. 画像アセットの先読み
  [fingerImageSrc, 'image/gu.png', 'image/cho.png', 'image/pa.png', 'image/front.png', 'image/up.png', 'image/down.png', 'image/left.png', 'image/right.png'].forEach(s => { const i = new Image(); i.src = s; assetCache.push(i); });
  internalEnemies.forEach(e => {
  if (e.bg) { const i = new Image(); i.src = e.bg; assetCache.push(i); }
  if (e.images) { Object.values(e.images).forEach(s => { const i = new Image(); i.src = s; assetCache.push(i); }); }
  });
+ 
+ // 2. サウンドアセットの先読み初期化＆デコード
+ audio.init();
+ const soundFiles = {
+ 'bgm_title': 'sound/bgm_title.mp3', 'se_click': 'sound/se_click.mp3',
+ 'se_pon': 'sound/se_pon.mp3', 'se_hoi': 'sound/se_hoi.mp3',
+ 'se_win': 'sound/se_win.mp3', 'se_lose': 'sound/se_lose.mp3',
+ 'se_ultra_player': 'sound/se_ultra_player.mp3', 'se_ultra_enemy': 'sound/se_ultra_enemy.mp3',
+ 'bgm_nobio': 'sound/bgm_battle_nobio.mp3', 'bgm_princess': 'sound/bgm_battle_princess.mp3',
+ 'bgm_protagonist': 'sound/bgm_battle_protagonist.mp3', 'bgm_ninja': 'sound/bgm_battle_ninja.mp3',
+ 'bgm_scientist': 'sound/bgm_battle_scientist.mp3', 'bgm_gamer': 'sound/bgm_battle_gamer.mp3',
+ 'bgm_demon': 'sound/bgm_battle_demon.mp3'
+ };
+ for (const [key, url] of Object.entries(soundFiles)) {
+ await audio.preload(key, url);
  }
- window.addEventListener('DOMContentLoaded', preloadAllAssets);
- // ゲームモード（ルール設定）
- function setGameMode(mode, element) { 
+ // 初期状態でタイトルBGMを再生開始
+ audio.playBGM('bgm_title', 0.2);
+}
+window.addEventListener('DOMContentLoaded', preloadAllAssets);
+// ゲームモード（ルール設定）
+function setGameMode(mode, element) { 
+ audio.init();
+ audio.playSE('se_click');
  gameMode = mode; 
  maxWinsNeeded = (mode === '1shot') ? 1 : 3; 
  document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('selected')); 
  element.classList.add('selected'); 
- }
+}
 
- // ボイスメッセージ表示（テレビアニメ風ポップアウト演出）
- function setVoiceText(text) { 
+// ボイスメッセージ表示（テレビアニメ風ポップアウト演出）
+function setVoiceText(text) { 
  const el = document.getElementById('voice-display'); 
  el.innerText = text; 
  el.style.animation = 'none'; 
  el.offsetHeight; 
  el.style.setProperty('animation', 'popOutBounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards', 'important');
- }
+}
 
- // 画面切り替え制御
- function changeScreen(screenId) { 
+// 画面切り替え制御
+function changeScreen(screenId) { 
  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
  document.getElementById(screenId).classList.add('active'); 
  if (screenId !== 'game-screen' && screenId !== 'intro-screen') {
  document.body.style.setProperty('background', 'linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%)', 'important');
  }
- }
-
- // バトル開始（ゲーム画面初期化）
- function startBattle() { 
+}
+// バトル開始（ゲーム画面初期化）
+function startBattle() { 
  changeScreen('game-screen'); 
+ // ★キャラクター専用のバトルBGMを再生（各キャラクターの背景・世界観に完全同期）
+ if (currentEnemy && currentEnemy.bgmKey) {
+ audio.playBGM(currentEnemy.bgmKey, 0.25);
+ }
  document.getElementById('match-count').innerText = currentStage === 'round1' ? "1回戦" : currentStage === 'semi' ? "準決勝" : "決勝戦"; 
  document.getElementById('enemy-name').innerText = `あいて：${currentEnemy.name}`; 
- 
  if (currentEnemy.images && currentEnemy.images['正面']) {
  document.getElementById('enemy-avatar-display-img').src = currentEnemy.images['正面'];
  } else {
  document.getElementById('enemy-avatar-display-img').src = enemyImages['正面']; 
  }
-
  if (currentEnemy.bg) {
  document.body.style.setProperty('background', `url('${currentEnemy.bg}') no-repeat center/cover`, 'important');
  } else {
  document.body.style.setProperty('background', 'linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%)', 'important');
  }
-
  const stageBox = document.getElementById('battle-stage-box');
  stageBox.style.backgroundImage = "none";
- 
  stageBox.classList.remove('player-turn', 'enemy-turn');
  const banner = document.getElementById('turn-banner-display');
  banner.style.display = 'none';
  banner.className = 'turn-indicator-banner';
-
  playerScore = 0; enemyScore = 0; 
  playerJankenWins = 0; enemyJankenWins = 0; 
  updateScoreDisplay(); 
  updateGaugeUI(); 
  isDrawRound = false; 
  startJankenLoop(); 
- }
+}
 
- // スコア表示更新
- function updateScoreDisplay() { 
+// スコア表示更新
+function updateScoreDisplay() { 
  const el = document.getElementById('score-display'); 
  if (gameMode === '1shot') {
  el.style.display = 'none';
@@ -940,45 +974,37 @@ body {
  el.style.display = 'block';
  el.innerText = `あなた [ ${'★'.repeat(playerScore)}${'☆'.repeat(3 - playerScore)} ] VS [ ${'★'.repeat(enemyScore)}${'☆'.repeat(3 - enemyScore)} ]`; 
  }
- }
-
- // 五芒星ゲージUI更新
- function updateGaugeUI() {
+}
+// 五芒星ゲージUI更新
+function updateGaugeUI() {
  const pBar = document.getElementById('player-gauge-bar');
  const eBar = document.getElementById('enemy-gauge-bar');
  const pPct = (playerJankenWins / 5) * 100;
  const ePct = (enemyJankenWins / 5) * 100;
  pBar.style.width = `${pPct}%`;
  eBar.style.width = `${ePct}%`;
- 
  if (playerJankenWins >= 5) pBar.classList.add('max'); else pBar.classList.remove('max');
  if (enemyJankenWins >= 5) eBar.classList.add('max'); else eBar.classList.remove('max');
- }
+}
 
- // じゃんけん画像シャッフルループ
- function startJankenLoop() { 
+// じゃんけん画像シャッフルループ
+function startJankenLoop() { 
  document.getElementById('janken-ui').style.display = 'flex'; 
  document.getElementById('hoi-ui').setAttribute("style", "display:none;");
  document.getElementById('ultra-alert-text').style.display = 'none'; 
  setVoiceText(isDrawRound ? "あいこで…" : "じゃーんけーん…"); 
- 
  const stageBox = document.getElementById('battle-stage-box');
- if (stageBox) {
- stageBox.classList.remove('player-turn', 'enemy-turn');
- }
+ if (stageBox) stageBox.classList.remove('player-turn', 'enemy-turn');
  const banner = document.getElementById('turn-banner-display');
  if (banner) {
  banner.style.display = 'none';
  banner.className = 'turn-indicator-banner';
  }
-
- // 😈 【魔王ダーク狂乱AI】
- // 自分の五芒星ゲージが4（あと1回で暗黒五芒星指）に達すると、シャッフル速度が30ms（超高速の狂乱状態）に変化
+ // 【魔王ダーク狂乱AI】 😈
  let currentSpeed = enemySpeed;
  if (currentEnemy && currentEnemy.name === "魔王ダーク" && enemyJankenWins === 4) {
  currentSpeed = 30; 
  }
-
  const hDisplay = document.getElementById('enemy-hand-display'); 
  if (currentStage === 'round1') { 
  currentHandIndex = (currentHandIndex + 1) % hands.length;
@@ -987,7 +1013,6 @@ body {
  }
  const firstHand = hands[currentHandIndex];
  hDisplay.innerHTML = `<img id="enemy-hand-img" src="${handImages[firstHand]}" alt="あいての手">`;
-
  clearInterval(loopInterval);
  loopInterval = setInterval(() => { 
  if (currentStage === 'round1') { 
@@ -1003,17 +1028,17 @@ body {
  hDisplay.innerHTML = `<img id="enemy-hand-img" src="${handImages[targetHand]}" alt="あいての手">`;
  }
  }, currentSpeed); 
- }
- // プレイヤーがじゃんけんの手を選択したときの判定関数
- function playJanken(playerHand) {
+}
+// プレイヤーがじゃんけんの手を選択したときの判定関数
+function playJanken(playerHand) {
  clearInterval(loopInterval); 
  const evh = hands[currentHandIndex]; 
- // 相手の確定した手を画像で表示
  const hImg = document.getElementById('enemy-hand-img');
  if (hImg) hImg.src = handImages[evh];
- setVoiceText(isDrawRound ? "しょ！" : "ぽん！");
  
- // 🧠 プレイヤーの手を学習バッファへ記憶
+ // 「ぽん！」「しょ！」の瞬間にラグなく効果音をトリガー
+ audio.playSE('se_pon');
+ setVoiceText(isDrawRound ? "しょ！" : "ぽん！");
  lastPlayerJankenHand = playerHand;
  
  if (playerHand === evh) { 
@@ -1023,91 +1048,83 @@ body {
  return; 
  }
  
- // 勝敗判定。戦闘カード(.stage-box)の半透明カラーネオン発光クラスと連動
  const stageBox = document.getElementById('battle-stage-box');
  const banner = document.getElementById('turn-banner-display');
  stageBox.classList.remove('player-turn', 'enemy-turn');
+ 
  if ((playerHand === '✊' && evh === '✌') || (playerHand === '✌' && evh === '🖐') || (playerHand === '🖐' && evh === '✊')) { 
  jankenResult = "player_attack"; 
- stageBox.classList.add('player-turn'); // 青ネオン発光をオーバーレイ
- banner.innerText = " YOUR ATTACK ⚔⚔ "; 
+ stageBox.classList.add('player-turn'); // 青ネオン発光
+ banner.innerText = " YOUR ATTACK ⚔⚔"; 
  banner.className = "turn-indicator-banner player-attack";
  } else { 
  jankenResult = "enemy_attack"; 
- stageBox.classList.add('enemy-turn'); // 赤ネオン発光をオーバーレイ
- banner.innerText = " ENEMY ATTACK 🛡🛡 "; 
+ stageBox.classList.add('enemy-turn'); // 赤ネオン発光
+ banner.innerText = " ENEMY ATTACK 🛡🛡"; 
  banner.className = "turn-indicator-banner enemy-attack"; 
  } 
  setTimeout(() => { setupHoi(); }, 1000);
- }
-
- // あっちむいてホイのセットアップ（攻守表示の完全同期ハイブリッド構造）
- function setupHoi() { 
+}
+// あっちむいてホイのセットアップ（攻守表示の完全同期ハイブリッド構造）
+function setupHoi() { 
  document.getElementById('janken-ui').style.display = 'none'; 
  document.getElementById('hoi-ui').removeAttribute("style");
- 
  const hDisplay = document.getElementById('enemy-hand-display');
  const alertEl = document.getElementById('ultra-alert-text');
  const btnContents = document.querySelectorAll('.hoi-btn-content');
  
- // スマホの描画負荷を最小限にするため、innerHTMLを汚さずに骨組みを固定してタイムラグを根絶
  hDisplay.innerHTML = `<div id="enemy-question-text" style="color:#111111; font-size:3rem; font-weight:900;">❓</div>
-                        <img id="enemy-hand-img" class="finger-img" src="${fingerImageSrc}" alt="指" style="display:none; width:85%; height:85%; object-fit:contain;">`;
+ <img id="enemy-hand-img" class="finger-img" src="${fingerImageSrc}" alt="指" style="display:none; width:85%; height:85%; object-fit:contain;">`;
  
  if (jankenResult === "player_attack") {
  // ーー 【 あなたが攻撃側のとき 】 ーー
- // 1. 中央の白い円盤は、相手がどこを向くか見えないように「❓」を表示
- const qText = document.getElementById('enemy-question-text');
- if (qText) qText.style.display = 'block';
- 
- // 2. 下部の操作ボタンは、あなたが指を差す側なので「指画像（hand.png）」を表示して分かりやすく誘導
  btnContents[0].innerHTML = `<img class="finger-img dir-up" src="${fingerImageSrc}" style="width:75%; height:75%; object-fit:contain; transform:rotate(-90deg);">`;
  btnContents[1].innerHTML = `<img class="finger-img dir-left" src="${fingerImageSrc}" style="width:75%; height:75%; object-fit:contain; transform:scaleX(-1);">`;
  btnContents[2].innerHTML = `<img class="finger-img dir-right" src="${fingerImageSrc}" style="width:75%; height:75%; object-fit:contain; transform:scale(1);">`;
  btnContents[3].innerHTML = `<img class="finger-img dir-down" src="${fingerImageSrc}" style="width:75%; height:75%; object-fit:contain; transform:rotate(90deg);">`;
  
  if (playerJankenWins >= 5) {
- alertEl.innerText = " 五芒星の絶対神指 ⭐ ！ ⭐ ";
+ alertEl.innerText = "五芒星の絶対神指！ ⭐⭐";
  alertEl.style.display = 'block';
+ // ★絶対神指発動時の神々しい必殺SEをラグなくトリガー
+ audio.playSE('se_ultra_player');
  setVoiceText("神の領域…！");
  } else {
  setVoiceText("あっち向いて―");
  }
  } else {
  // ーー 【 あなたが防御側のとき 】 ーー
- // 1. 中央の白い円盤は、合図の瞬間に相手の指が飛び出すので、それまで一旦隠しておきます（または「❓」）
- const qText = document.getElementById('enemy-question-text');
- if (qText) qText.style.display = 'block';
- 
- // 2. 下部の操作ボタンは、あなたが顔をのける側なので、防御時に見やすいはっきりとした「黒三角（▲▼◀▶）」を表示
  btnContents[0].innerText = "▲";
  btnContents[1].innerText = "◀";
  btnContents[2].innerText = "▶";
  btnContents[3].innerText = "▼";
  
  if (enemyJankenWins >= 5) {
- alertEl.innerText = " 敵の暗黒五芒星指 ⚠ ！ ⚠ ";
+ alertEl.innerText = "敵の暗黒五芒星指！ ⚠⚠";
  alertEl.style.display = 'block';
+ // ★暗黒五芒星指発動時の絶望的な必殺SEをラグなくトリガー
+ audio.playSE('se_ultra_enemy');
  setVoiceText("絶体絶命…！");
  } else {
  setVoiceText("あっち向いて―"); 
  }
  }
- }
- // あっちむいてホイの方向選択・勝敗判定
- function playHoi(playerDir) {
+}
+// あっちむいてホイの方向選択・勝敗判定
+function playHoi(playerDir) {
+ // 五芒星発動時は強制的に画面をシェイク（震動）させる演出を同期
  if ((jankenResult === "player_attack" && playerJankenWins >= 5) || (jankenResult === "enemy_attack" && enemyJankenWins >= 5)) {
  document.body.classList.add('shake-animation');
  setTimeout(() => { document.body.classList.remove('shake-animation'); }, 600);
  }
  document.getElementById('ultra-alert-text').style.display = 'none';
+ 
+ // 「ほい！」の効果音をジャストのタイミングでトリガー
+ audio.playSE('se_hoi');
  setVoiceText("ほい！"); 
  document.getElementById('hoi-ui').setAttribute("style", "display:none;");
- 
  let ek = "";
  const av = document.getElementById('enemy-avatar-display-img');
- 
- // スマホの描画負荷を最小限にするため、innerHTMLを壊さずdisplay切り替えだけで指画像を出現
  const qText = document.getElementById('enemy-question-text');
  if (qText) qText.style.display = 'none';
  const fImg = document.getElementById('enemy-hand-img');
@@ -1117,9 +1134,8 @@ body {
  if (playerJankenWins >= 5) {
  ek = playerDir; // 確定勝利システム（絶対神指）
  } else {
- // 🧠 CPU固有AI思考ロジック（防御）
+ // CPU固有AI思考ロジック（防御） 🧠
  if (currentEnemy.name === "マッド科学者" && lastPlayerHoiDir) {
- // 🧠 マッド科学者の心理分析：プレイヤーが「前回と同じ方向」に指を指すと予測し、75%の確率でそこを回避
  if (Math.random() < 0.75) {
  const safeDirs = dirKeys.filter(d => d !== lastPlayerHoiDir);
  ek = safeDirs[Math.floor(Math.random() * safeDirs.length)];
@@ -1127,7 +1143,6 @@ body {
  ek = dirKeys[Math.floor(Math.random() * dirKeys.length)];
  }
  } else if (currentEnemy.name === "魔王ダーク" && enemyJankenWins === 4) {
- // 😈 魔王ダーク狂乱：ピンチになると、逃げ癖のプールをプレイヤーの予測を覆す「上・下」のみの縦型に完全固定
  const darkDefendPool = ['上', '下'];
  ek = darkDefendPool[Math.floor(Math.random() * darkDefendPool.length)];
  } else {
@@ -1138,56 +1153,49 @@ body {
  }
  // あなたの攻撃時：敵はおののいて顔を逃げる方向（ek）へ向ける
  if (currentEnemy.images && currentEnemy.images[ek]) { av.src = currentEnemy.images[ek]; } else { av.src = enemyImages[ek] || 'image/front.png'; }
- 
- // あなたの攻撃時：中央の円盤に、あなたが差し向けた「確定した指の方向」を表示
  applyFingerDirection(fImg, playerDir); 
  } else {
-   if (enemyJankenWins >= 5) {
-     ek = playerDir; // 相手の確定勝利（暗黒五芒星指）
-   } else {
-     // 🧠 CPU固有AI思考ロジック（攻撃）
-     if (currentEnemy.name === "マッド科学者" && lastPlayerHoiDir) {
-       // 🧠 マッド科学者の心理分析：プレイヤーが「前回逃げた方向」へもう一度逃げると予測し、70%の超高確率でそこを狙い撃ち
-       if (Math.random() < 0.70) {
-         ek = lastPlayerHoiDir; 
-       } else {
-         ek = dirKeys[Math.floor(Math.random() * dirKeys.length)];
-       }
-     } else if (currentEnemy.name === "魔王ダーク" && enemyJankenWins === 4) {
-       // 😈 魔王ダーク狂乱：ピンチになると、攻撃方向が「左・右」のみの超攻撃型2択へと完全変貌
-       const darkAttackPool = ['左', '右'];
-       ek = darkAttackPool[Math.floor(Math.random() * darkAttackPool.length)];
-     } else {
-       const attackPool = currentEnemy.favAttackDirs || ['上','下','左','右'];
-       ek = attackPool[Math.floor(Math.random() * attackPool.length)];
-     }
-   }
-   
-   // 相手の攻撃時：ご指示通り、相手のイラストは常に正面をキープ
-   if (currentEnemy.images && currentEnemy.images['正面']) { av.src = currentEnemy.images['正面']; } else { av.src = enemyImages['正面'] || 'image/front.png'; }
-   
-   // 相手の攻撃時：中央の円盤に、相手が攻めてきた「敵の指」を出現させて回転
-   applyFingerDirection(fImg, ek); 
+ if (enemyJankenWins >= 5) {
+ ek = playerDir; // 相手の確定勝利（暗黒五芒星指）
+ } else {
+ // CPU固有AI思考ロジック（攻撃） 🧠
+ if (currentEnemy.name === "マッド科学者" && lastPlayerHoiDir) {
+ if (Math.random() < 0.70) {
+ ek = lastPlayerHoiDir; 
+ } else {
+ ek = dirKeys[Math.floor(Math.random() * dirKeys.length)];
+ }
+ } else if (currentEnemy.name === "魔王ダーク" && enemyJankenWins === 4) {
+ const darkAttackPool = ['左', 'right', '左', '右']; // 左右2択
+ ek = darkAttackPool[Math.floor(Math.random() * darkAttackPool.length)];
+ if (ek === 'right') ek = '右';
+ } else {
+ const attackPool = currentEnemy.favAttackDirs || ['上','下','左','右'];
+ ek = attackPool[Math.floor(Math.random() * attackPool.length)];
+ }
  }
  
- // 🧠 今回のプレイヤーの動向を次回の学習ログへ記憶
- lastPlayerHoiDir = playerDir;
+ // 相手の攻撃時：相手のイラストは常に正面をキープ
+ if (currentEnemy.images && currentEnemy.images['正面']) { av.src = currentEnemy.images['正面']; } else { av.src = enemyImages['正面'] || 'image/front.png'; }
+ applyFingerDirection(fImg, ek); 
+ }
  
+ // 今回のプレイヤーの動向を次回の学習ログへ記憶 🧠
+ lastPlayerHoiDir = playerDir;
  setTimeout(() => {
-   if (fImg) fImg.className = "finger-img";
-   if (currentEnemy.images && currentEnemy.images['正面']) { av.src = currentEnemy.images['正面']; } else { av.src = enemyImages['正面']; } 
-   if (playerDir === ek) { 
-     if (jankenResult === "player_attack") { playerScore++; } else { enemyScore++; }
-     playerJankenWins = 0; enemyJankenWins = 0;
-     updateScoreDisplay(); updateGaugeUI();
-     if (playerScore >= maxWinsNeeded) { endBattle("win"); } else if (enemyScore >= maxWinsNeeded) { endBattle("lose"); } else { isDrawRound = false; startJankenLoop(); } 
-   } else { 
-     if (jankenResult === "player_attack") { playerJankenWins = Math.min(5, playerJankenWins + 1); } else { enemyJankenWins = Math.min(5, enemyJankenWins + 1); }
-     isDrawRound = false; updateGaugeUI(); startJankenLoop();
-   }
+ if (fImg) fImg.className = "finger-img";
+ if (currentEnemy.images && currentEnemy.images['正面']) { av.src = currentEnemy.images['正面']; } else { av.src = enemyImages['正面']; } 
+ if (playerDir === ek) { 
+ if (jankenResult === "player_attack") { playerScore++; } else { enemyScore++; }
+ playerJankenWins = 0; enemyJankenWins = 0;
+ updateScoreDisplay(); updateGaugeUI();
+ if (playerScore >= maxWinsNeeded) { endBattle("win"); } else if (enemyScore >= maxWinsNeeded) { endBattle("lose"); } else { isDrawRound = false; startJankenLoop(); } 
+ } else { 
+ if (jankenResult === "player_attack") { playerJankenWins = Math.min(5, playerJankenWins + 1); } else { enemyJankenWins = Math.min(5, enemyJankenWins + 1); }
+ isDrawRound = false; updateGaugeUI(); startJankenLoop();
+ }
  }, 1500);
 }
-
 // 指画像の4方向CSSクラス適用補助関数（ミリ単位の回転制御を完全復元）
 function applyFingerDirection(element, dir) {
  element.className = "finger-img"; // 一度リセット
@@ -1196,185 +1204,204 @@ function applyFingerDirection(element, dir) {
  if (dir === '上') element.classList.add('dir-up');
  if (dir === '下') element.classList.add('dir-down');
 }
+
 // バトル終了処理
 function endBattle(result) {
-  const rt = document.getElementById('result-text');
-  const rd = document.getElementById('result-dialogue');
-  const nb = document.getElementById('result-next-btn');
-  
-  const stageBox = document.getElementById('battle-stage-box');
-  stageBox.classList.remove('player-turn', 'enemy-turn');
-  document.getElementById('turn-banner-display').style.display = 'none';
-  if (result === "win") { 
-    rt.innerText = " 勝ち抜け！ 🎉🎉 "; 
-    rt.className = "result-title win"; 
-    rd.innerHTML = `${currentEnemy.name}：<br>「${currentEnemy.lose}」`; 
-    nb.innerText = "トーナメント表へ"; 
-  } else { 
-    rt.innerText = " 敗北... 😭😭 "; 
-    rt.className = "result-title lose"; 
-    rd.innerHTML = `${currentEnemy.name}：<br>「${currentEnemy.win}」`; 
-    nb.innerText = "タイトルへ"; 
-  } 
-  changeScreen('result-screen');
+ audio.stopBgm(); // キャラクター個別バトルBGMを即座に停止
+ const rt = document.getElementById('result-text');
+ const rd = document.getElementById('result-dialogue');
+ const nb = document.getElementById('result-next-btn');
+ 
+ const stageBox = document.getElementById('battle-stage-box');
+ stageBox.classList.remove('player-turn', 'enemy-turn');
+ document.getElementById('turn-banner-display').style.display = 'none';
+ 
+ if (result === "win") { 
+ audio.playSE('se_win'); // 勝ちジングルをラグなく再生
+ rt.innerText = " 勝ち抜け！ 🎉🎉"; 
+ rt.className = "result-title win"; 
+ rd.innerHTML = `${currentEnemy.name}：<br>「${currentEnemy.lose}」`; 
+ nb.innerText = "トーナメント表へ"; 
+ } else { 
+ audio.playSE('se_lose'); // 負けジングルをラグなく再生
+ rt.innerText = " 敗北... 😭😭"; 
+ rt.className = "result-title lose"; 
+ rd.innerHTML = `${currentEnemy.name}：<br>「${currentEnemy.win}」`; 
+ nb.innerText = "タイトルへ"; 
+ } 
+ changeScreen('result-screen');
 }
-
 // トーナメント開始
 function startTournament() {
-  currentStage = 'round1'; playerScore = 0; enemyScore = 0;
-  playerIndexInTournament = Math.floor(Math.random() * 8);
-  let allEnemies = [...internalEnemies].sort(() => Math.random() - 0.5);
-  let flatSeats = new Array(8);
-  flatSeats[playerIndexInTournament] = { name: "あなた", isPlayer: true };
-  let enemyIdx = 0;
-  for (let i = 0; i < 8; i++) {
-    if (i !== playerIndexInTournament) { flatSeats[i] = allEnemies[enemyIdx++]; }
-  }
-  for (let i = 0; i < 4; i++) {
-    tournamentTree.round1[i] = { p1: flatSeats[i * 2], p2: flatSeats[i * 2 + 1], winner: null };
-  }
-  tournamentTree.semi = [ { p1: null, p2: null, winner: null }, { p1: null, p2: null, winner: null } ];
-  tournamentTree.final = { p1: null, p2: null, winner: null };
-  playerJankenWins = 0; enemyJankenWins = 0;
-  drawTournamentChart(); 
-  changeScreen('chart-screen');
+ audio.init();
+ audio.playSE('se_click'); // クリック効果音
+ currentStage = 'round1'; playerScore = 0; enemyScore = 0;
+ playerIndexInTournament = Math.floor(Math.random() * 8);
+ 
+ let allEnemies = [...internalEnemies].sort(() => Math.random() - 0.5);
+ let flatSeats = new Array(8);
+ flatSeats[playerIndexInTournament] = { name: "あなた", isPlayer: true };
+ 
+ let enemyIdx = 0;
+ for (let i = 0; i < 8; i++) {
+ if (i !== playerIndexInTournament) { flatSeats[i] = allEnemies[enemyIdx++]; }
+ }
+ for (let i = 0; i < 4; i++) {
+ tournamentTree.round1[i] = { p1: flatSeats[i * 2], p2: flatSeats[i * 2 + 1], winner: null };
+ }
+ tournamentTree.semi = [ { p1: null, p2: null, winner: null }, { p1: null, p2: null, winner: null } ];
+ tournamentTree.final = { p1: null, p2: null, winner: null };
+ playerJankenWins = 0; enemyJankenWins = 0;
+ 
+ drawTournamentChart(); 
+ changeScreen('chart-screen');
 }
- // トーナメント表の描画
- function drawTournamentChart() {
-   const container = document.getElementById('chart-box-container'); 
-   container.innerHTML = "";
-   
-   let html = `<div class="tournament-container">`;
-   
-   // 1段目: 1回戦枠（一番下）
-   html += `<div class="tournament-round">`;
-   tournamentTree.round1.forEach((match) => {
-     [match.p1, match.p2].forEach(p => {
-       if (!p) return;
-       let pClass = p.isPlayer ? "player-node is-me" : "player-node";
-       if (match.winner === p) pClass += " is-winner";
-       html += `<div class="match-slot"><div class="${pClass}">${match.winner === p ? '👑 ' : ''}${p.name}</div></div>`;
-     });
-   });
-   html += `</div>`;
-
-   // 2段目: 準決勝枠（縦書きで綺麗に回転する全角かっこ「（勝者）」に対応）
-   html += `<div class="tournament-round">`;
-   for (let i = 0; i < 2; i++) {
-     let m = tournamentTree.semi[i], p1 = m ? m.p1 : null, p2 = m ? m.p2 : null;
-     [p1, p2].forEach((p, idx) => {
-       html += `<div class="match-slot" style="visibility: hidden;"></div>`;
-       let name = p ? p.name : "（" + " " + "勝者" + " " + "）";
-       let pClass = (p && p.isPlayer) ? "player-node is-me" : "player-node";
-       if (m && m.winner && m.winner === p) pClass += " is-winner";
-       html += `<div class="match-slot"><div class="${pClass}">${m && m.winner === p ? '👑 ' : ''}${name}</div></div>`; 
-       html += `<div class="match-slot" style="visibility: hidden;"></div>`;
-     });
-   }
-   html += `</div>`;
-
-   // 3段目: 決勝戦枠
-   html += `<div class="tournament-round">`;
-   let f = tournamentTree.final; let f1 = f ? f.p1 : null; let f2 = f ? f.p2 : null;
-   [f1, f2].forEach((p, idx) => {
-     html += `<div class="match-slot" style="visibility: hidden;"></div>`;
-     html += `<div class="match-slot" style="visibility: hidden;"></div>`;
-     let name = p ? p.name : "（" + " " + "勝者" + " " + "）";
-     let pClass = (p && p.isPlayer) ? "player-node is-me" : "player-node";
-     if (f && f.winner && f.winner === p) pClass += " is-winner"; 
-     html += `<div class="match-slot"><div class="${pClass}">${f && f.winner === p ? '👑 ' : ''}${name}</div></div>`; 
-     html += `<div class="match-slot" style="visibility: hidden;"></div>`;
-     html += `<div class="match-slot" style="visibility: hidden;"></div>`;
-   });
-   html += `</div>`;
-   
-   // 4段目: 優勝者枠（一番上）
-   let finalWinnerName = "（" + " " + "優勝者" + " " + "）", winnerClass = "player-node";
-   if (f && f.winner) { 
-     finalWinnerName = f.winner.name; 
-     winnerClass += f.winner.isPlayer ? " is-me is-winner" : " is-winner";
-   }
-   
-   html += '<div class="tournament-round">';
-   for(let k=0; k<3; k++) { html += '<div class="match-slot" style="visibility: hidden;"></div>'; }
-   html += `<div class="match-slot" style="--line-display: none; width: 25%;"><div class="${winnerClass}" style="border-width:2px; background: linear-gradient(180deg, #fffde7 0%, #fff9c4 100%); color: #b78103; box-shadow: 0 0 10px rgba(251,191,36,0.5); width: 100%;">✨ ${finalWinnerName} ✨</div></div>`; 
-   for(let k=0; k<3; k++) { html += '<div class="match-slot" style="visibility: hidden;"></div>'; }
-   html += '</div>';
-   html += `</div>`;
-   container.innerHTML = html; 
-   updateBattleStartButton();
+// トーナメント表の描画
+function drawTournamentChart() {
+ const container = document.getElementById('chart-box-container'); 
+ container.innerHTML = "";
+ 
+ let html = `<div class="tournament-container">`;
+ 
+ // 1段目: 1回戦枠（一番下）
+ html += `<div class="tournament-round">`;
+ tournamentTree.round1.forEach((match) => {
+ [match.p1, match.p2].forEach(p => {
+ if (!p) return;
+ let pClass = p.isPlayer ? "player-node is-me" : "player-node";
+ if (match.winner === p) pClass += " is-winner";
+ html += `<div class="match-slot"><div class="${pClass}">${match.winner === p ? '👑 ' : ''}${p.name}</div></div>`;
+ });
+ });
+ html += `</div>`;
+ 
+ // 2段目: 準決勝枠（縦書きで綺麗に回転する全角かっこ「（勝者）」に対応）
+ html += `<div class="tournament-round">`;
+ for (let i = 0; i < 2; i++) {
+ let m = tournamentTree.semi[i], p1 = m ? m.p1 : null, p2 = m ? m.p2 : null;
+ [p1, p2].forEach((p, idx) => {
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ let name = p ? p.name : "（" + " " + "勝者" + " " + "）";
+ let pClass = (p && p.isPlayer) ? "player-node is-me" : "player-node";
+ if (m && m.winner && m.winner === p) pClass += " is-winner";
+ html += `<div class="match-slot"><div class="${pClass}">${m && m.winner === p ? '👑 ' : ''}${name}</div></div>`; 
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ });
+ }
+ html += `</div>`;
+ // 3段目: 決勝戦枠
+ html += `<div class="tournament-round">`;
+ let f = tournamentTree.final; let f1 = f ? f.p1 : null; let f2 = f ? f.p2 : null;
+ [f1, f2].forEach((p, idx) => {
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ let name = p ? p.name : "（" + " " + "勝者" + " " + "）";
+ let pClass = (p && p.isPlayer) ? "player-node is-me" : "player-node";
+ if (f && f.winner && f.winner === p) pClass += " is-winner"; 
+ html += `<div class="match-slot"><div class="${pClass}">${f && f.winner === p ? '👑 ' : ''}${name}</div></div>`; 
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ html += `<div class="match-slot" style="visibility: hidden;"></div>`;
+ });
+ html += `</div>`;
+ 
+ // 4段目: 優勝者枠（一番上）
+ let finalWinnerName = "（" + " " + "優勝者" + " " + "）", winnerClass = "player-node";
+ if (f && f.winner) { 
+ finalWinnerName = f.winner.name; 
+ winnerClass += f.winner.isPlayer ? " is-me is-winner" : " is-winner";
+ }
+ 
+ html += '<div class="tournament-round">';
+ for(let k=0; k<3; k++) { html += '<div class="match-slot" style="visibility: hidden;"></div>'; }
+ html += `<div class="match-slot" style="--line-display: none; width: 25%;"><div class="${winnerClass}" style="border-width:2px; background: linear-gradient(180deg, #fffde7 0%, #fff9c4 100%); color: #b78103; box-shadow: 0 0 10px rgba(251,191,36,0.5); width: 100%;"> ✨ ${finalWinnerName} </div></div>`;
+ for(let k=0; k<3; k++) { html += '<div class="match-slot" style="visibility: hidden;"></div>'; }
+ html += '</div>';
+ html += `</div>`;
+ container.innerHTML = html; 
+ updateBattleStartButton();
  }
 
- // 対戦相手選択ボタンのテキスト更新
- function updateBattleStartButton() {
-   let btn = document.getElementById('chart-start-btn'); if (!btn) return;
-   if (currentStage === 'round1') { 
-     let m = tournamentTree.round1.find(m => m && m.p1 && m.p2 && (m.p1.isPlayer || m.p2.isPlayer) && !m.winner); 
-     if (m) { currentEnemy = m.p1.isPlayer ? m.p2 : m.p1; btn.innerText = `${currentEnemy.name}戦に挑む！`; }
-   } else if (currentStage === 'semi') { 
-     let m = tournamentTree.semi.find(m => m && m.p1 && m.p2 && ((m.p1.isPlayer) || (m.p2.isPlayer)) && !m.winner); 
-     if (m) { currentEnemy = m.p1.isPlayer ? m.p2 : m.p1; btn.innerText = `準決勝：${currentEnemy.name} 戦！`; }
-   } else if (currentStage === 'final') { 
-     let m = tournamentTree.final; 
-     if (m && m.p1 && m.p2) { currentEnemy = m.p1.isPlayer ? m.p2 : m.p1; btn.innerText = `決勝戦：${currentEnemy.name}！`; }
-   }
+// 対戦相手選択ボタンのテキスト更新
+function updateBattleStartButton() {
+ let btn = document.getElementById('chart-start-btn'); if (!btn) return;
+ if (currentStage === 'round1') { 
+ let m = tournamentTree.round1.find(m => m && m.p1 && m.p2 && (m.p1.isPlayer || m.p2.isPlayer) && !m.winner); 
+ if (m) { currentEnemy = m.p1.isPlayer ? m.p2 : m.p1; btn.innerText = `${currentEnemy.name}戦に挑む！`; }
+ } else if (currentStage === 'semi') { 
+ let m = tournamentTree.semi.find(m => m && m.p1 && m.p2 && ((m.p1.isPlayer) || (m.p2.isPlayer)) && !m.winner); 
+ if (m) { currentEnemy = m.p1.isPlayer ? m.p2 : m.p1; btn.innerText = `準決勝：${currentEnemy.name} 戦！`; }
+ } else if (currentStage === 'final') { 
+ let m = tournamentTree.final; 
+ if (m && m.p1 && m.p2) { currentEnemy = m.p1.isPlayer ? m.p2 : m.p1; btn.innerText = `決勝戦：${currentEnemy.name}！`; }
  }
-
- // 試合前のイントロ画面へ移行（100%確実な最背面背景連動システム）
- function proceedToIntro() {
-   document.getElementById('tournament-stage-title').innerText = currentStage === 'round1' ? "1回戦" : currentStage === 'semi' ? "準決勝" : "決勝戦";
-   document.getElementById('intro-matchup').innerText = `プレイヤー VS ${currentEnemy.name}`; 
-   document.getElementById('intro-dialogue').innerText = `「${currentEnemy.intro}」`; 
-   if (currentEnemy.images && currentEnemy.images['正面']) {
-     document.getElementById('intro-enemy-img').src = currentEnemy.images['正面'];
-   } else {
-     document.getElementById('intro-enemy-img').src = enemyImages['正面'];
-   }
-   if (currentEnemy.bg) {
-     document.body.style.setProperty('background', `url('${currentEnemy.bg}') no-repeat center/cover`, 'important');
-   } else {
-     document.body.style.setProperty('background', 'linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%)', 'important');
-   }
-   enemySpeed = currentStage === 'round1' ? 300 : currentStage === 'semi' ? 140 : 60; 
-   changeScreen('intro-screen');
+}
+// 試合前のイントロ画面へ移行（100%確実な最背面背景連動システム）
+function proceedToIntro() {
+ audio.playSE('se_click'); // ボタンクリック音
+ document.getElementById('tournament-stage-title').innerText = 
+ currentStage === 'round1' ? "1回戦" : currentStage === 'semi' ? "準決勝" : "決勝戦";
+ document.getElementById('intro-matchup').innerText = `プレイヤー VS ${currentEnemy.name}`; 
+ document.getElementById('intro-dialogue').innerText = `「${currentEnemy.intro}」`; 
+ 
+ if (currentEnemy.images && currentEnemy.images['正面']) {
+ document.getElementById('intro-enemy-img').src = currentEnemy.images['正面'];
+ } else {
+ document.getElementById('intro-enemy-img').src = enemyImages['正面'];
  }
-
- // 次のステップへ進行（トーナメント表の勝利フラグ書き換え ＆ ステージアップ）
- function nextStep() {
-   if (document.getElementById('result-text').innerText.includes("敗北")) { 
-     quitGame(); return; 
-   }
-   if (currentStage === 'round1') {
-     let myMatch = tournamentTree.round1.find(m => m && (m.p1.isPlayer || m.p2.isPlayer) && !m.winner); 
-     if (myMatch) { myMatch.winner = myMatch.p1.isPlayer ? myMatch.p1 : myMatch.p2; }
-     tournamentTree.round1.forEach(match => { if (match && !match.winner) match.winner = Math.random() > 0.5 ? match.p1 : match.p2; });
-     tournamentTree.semi = [
-       { p1: tournamentTree.round1[0].winner, p2: tournamentTree.round1[1].winner, winner: null },
-       { p1: tournamentTree.round1[2].winner, p2: tournamentTree.round1[3].winner, winner: null }
-     ];
-     currentStage = 'semi'; drawTournamentChart(); 
-     changeScreen('chart-screen');
-   } else if (currentStage === 'semi') {
-     let myMatch = tournamentTree.semi.find(m => m && ((m.p1 && m.p1.isPlayer) || (m.p2 && m.p2.isPlayer)) && !m.winner); 
-     if (myMatch) { myMatch.winner = (myMatch.p1 && myMatch.p1.isPlayer) ? myMatch.p1 : myMatch.p2; }
-     let cpuMatch = tournamentTree.semi.find(m => m && !((m.p1 && m.p1.isPlayer) || (m.p2 && m.p2.isPlayer))); 
-     if (cpuMatch) { cpuMatch.winner = Math.random() > 0.5 ? cpuMatch.p1 : cpuMatch.p2; }
-     tournamentTree.final = { p1: tournamentTree.semi[0].winner, p2: tournamentTree.semi[1].winner, winner: null };
-     currentStage = 'final'; drawTournamentChart(); 
-     changeScreen('chart-screen');
-   } else { 
-     let f = tournamentTree.final; 
-     f.winner = (f.p1 && f.p1.isPlayer) ? f.p1 : f.p2; 
-     drawTournamentChart();
-     changeScreen('champion-screen'); 
-   }
+ 
+ if (currentEnemy.bg) {
+ document.body.style.setProperty('background', `url('${currentEnemy.bg}') no-repeat center/cover`, 'important');
+ } else {
+ document.body.style.setProperty('background', 'linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%)', 'important');
  }
-
- // 棄権・タイトルへ戻る
- function quitGame() { 
-   clearInterval(loopInterval); 
-   changeScreen('start-screen'); 
+ 
+ // ステージが上がるごとにじゃんけんループの基本速度を高速化
+ enemySpeed = currentStage === 'round1' ? 300 : currentStage === 'semi' ? 140 : 60; 
+ changeScreen('intro-screen');
+}
+// 次のステップへ進行（トーナメント表の勝利フラグ書き換え ＆ ステージアップ）
+function nextStep() {
+ audio.playSE('se_click');
+ if (document.getElementById('result-text').innerText.includes("敗北")) {
+ quitGame(); return; 
  }
+ if (currentStage === 'round1') {
+ let myMatch = tournamentTree.round1.find(m => m && (m.p1.isPlayer || m.p2.isPlayer) && !m.winner); 
+ if (myMatch) { myMatch.winner = myMatch.p1.isPlayer ? myMatch.p1 : myMatch.p2; }
+ tournamentTree.round1.forEach(match => { if (match && !match.winner) match.winner = Math.random() > 0.5 ? match.p1 : match.p2; });
+ 
+ tournamentTree.semi = [
+ { p1: tournamentTree.round1[0].winner, p2: tournamentTree.round1[1].winner, winner: null },
+ { p1: tournamentTree.round1[2].winner, p2: tournamentTree.round1[3].winner, winner: null }
+ ];
+ currentStage = 'semi'; drawTournamentChart(); 
+ changeScreen('chart-screen');
+ // バトルが終了してトーナメント表に戻る際はタイトルBGMへ戻す
+ audio.playBGM('bgm_title', 0.2);
+ } else if (currentStage === 'semi') {
+ let myMatch = tournamentTree.semi.find(m => m && ((m.p1 && m.p1.isPlayer) || (m.p2 && m.p2.isPlayer)) && !m.winner); 
+ if (myMatch) { myMatch.winner = (myMatch.p1 && myMatch.p1.isPlayer) ? myMatch.p1 : myMatch.p2; }
+ let cpuMatch = tournamentTree.semi.find(m => m && !((m.p1 && m.p1.isPlayer) || (m.p2 && m.p2.isPlayer))); 
+ if (cpuMatch) { cpuMatch.winner = Math.random() > 0.5 ? cpuMatch.p1 : cpuMatch.p2; }
+ 
+ tournamentTree.final = { p1: tournamentTree.semi[0].winner, p2: tournamentTree.semi[1].winner, winner: null };
+ currentStage = 'final'; drawTournamentChart(); 
+ changeScreen('chart-screen');
+ audio.playBGM('bgm_title', 0.2);
+ } else { 
+ let f = tournamentTree.final; 
+ f.winner = (f.p1 && f.p1.isPlayer) ? f.p1 : f.p2; 
+ drawTournamentChart();
+ changeScreen('champion-screen'); 
+ }
+}
+// 棄権・タイトルへ戻る
+function quitGame() { 
+ clearInterval(loopInterval); 
+ audio.stopBgm(); // 再生中のバトルBGMを完全停止
+ audio.playBGM('bgm_title', 0.2); // タイトルBGMを優しく復元
+ changeScreen('start-screen'); 
+}
 </script>
 </body>
 </html>
